@@ -47,7 +47,7 @@ function generateCards(people, gameTitle, orderNumber) {
   <style>
     @page { size: letter portrait; margin: 8mm; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, sans-serif; background: white; }
+    body { font-family: Arial, sans-serif; background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .header { text-align: center; margin-bottom: 5mm; padding-bottom: 3mm; border-bottom: 1px solid #eee; }
     .header h1 { font-size: 14pt; font-weight: 800; }
     .header h1 span { color: #8ab020; }
@@ -151,6 +151,8 @@ function generateBoard(people, gameTitle, orderNumber) {
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
     .slot-photo {
       flex: 1;
@@ -186,9 +188,13 @@ function generateBoard(people, gameTitle, orderNumber) {
     }
     .slot-flap {
       height: 7mm;
-      background: #111;
+      min-height: 7mm;
+      background: #111 !important;
       border-top: 1px solid #000;
       flex-shrink: 0;
+      display: block;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
     .footer {
       margin-top: 3mm;
