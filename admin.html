@@ -126,7 +126,7 @@ tr:hover td { background: rgba(255,255,255,0.015); }
 
 <!-- SIDEBAR -->
 <nav class="sidebar">
-  <div class="s-logo">Guess<span>Who</span><br><small>Admin · Dizing Creative</small></div>
+  <div class="s-logo">Guess<span>Who</span><br><small>Admin · GuessWho.maker</small></div>
   <div class="s-nav">
     <div class="s-section">Main</div>
     <button class="s-link active" onclick="showTab('dashboard',this)"><span class="icon">📊</span> Dashboard</button>
@@ -310,7 +310,7 @@ tr:hover td { background: rgba(255,255,255,0.015); }
     <div class="settings-grid">
       <div class="settings-card">
         <h3>Your contact info</h3>
-        <div class="field"><label>Business name</label><input type="text" id="s-biz" value="Dizing Creative"></div>
+        <div class="field"><label>Business name</label><input type="text" id="s-biz" value="GuessWho.maker"></div>
         <div class="field"><label>Your WhatsApp</label><input type="text" id="s-wa" placeholder="+1 555 000-0000"></div>
         <div class="field"><label>Your email</label><input type="text" id="s-email" placeholder="you@email.com"></div>
         <div class="save-row"><button class="btn btn-accent btn-sm" onclick="saveSettings()">Save</button></div>
@@ -384,14 +384,14 @@ function copyLink2() {
 function sendWA() {
   const url = document.getElementById('link-url').textContent;
   const name = document.getElementById('q-name').value;
-  const msg = encodeURIComponent(`Hi ${name}! 🎲 Click the link below to add your 24 photos for your custom family Guess Who game:\n\n${url}\n\n— Dizing Creative`);
+  const msg = encodeURIComponent(`Hi ${name}! 🎲 Click the link below to add your 24 photos for your custom family Guess Who game:\n\n${url}\n\n— GuessWho.maker`);
   window.open('https://wa.me/?text='+msg,'_blank');
 }
 function sendWAFull() {
   const url = document.getElementById('link-url2').textContent;
   const name = document.getElementById('nl-name').value;
   const phone = document.getElementById('nl-phone').value.replace(/\D/g,'');
-  const msg = encodeURIComponent(`Hi ${name}! 🎲 Click the link below to add your 24 photos for your custom family Guess Who game:\n\n${url}\n\n— Dizing Creative`);
+  const msg = encodeURIComponent(`Hi ${name}! 🎲 Click the link below to add your 24 photos for your custom family Guess Who game:\n\n${url}\n\n— GuessWho.maker`);
   const waUrl = phone ? `https://wa.me/${phone}?text=${msg}` : `https://wa.me/?text=${msg}`;
   window.open(waUrl,'_blank');
 }
