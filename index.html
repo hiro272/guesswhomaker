@@ -104,6 +104,22 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .slot .snum { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; color: var(--muted); }
 .slot .check { position: absolute; top: 5px; right: 5px; width: 16px; height: 16px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; font-size: 9px; z-index: 2; }
 .slot .empty-icon { font-size: 18px; opacity: 0.15; }
+.slot-overlay-del {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0);
+  display: flex; align-items: flex-start; justify-content: flex-end;
+  padding: 4px; transition: background 0.15s;
+  cursor: pointer; z-index: 3;
+}
+.slot-overlay-del:hover { background: rgba(0,0,0,0.35); }
+.del-btn {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--red); color: white;
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.15s;
+}
+.slot-overlay-del:hover .del-btn { opacity: 1; }
 
 /* REVIEW GRID */
 .review-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 1.5rem; }
@@ -384,8 +400,13 @@ function updateUploadProgress() {
 
   // Render thumbnails
   document.getElementById('upload-grid').innerHTML = people.map((p,i) => `
-    <div class="slot ${p.photo ? 'has-photo' : ''}">
-      ${p.photo ? `<img src="${p.photo}">` : `<div class="empty-icon">+</div>`}
+    <div class="slot ${p.photo ? 'has-photo' : ''}" onclick="${p.photo ? '' : `document.getElementById('bulk-input').click()`}">
+      ${p.photo
+        ? `<img src="${p.photo}">
+           <div class="slot-overlay-del" onclick="event.stopPropagation();deletePhoto(${i})">
+             <span class="del-btn">✕</span>
+           </div>`
+        : `<div class="empty-icon">+</div>`}
       <span class="snum" style="${p.photo?'display:none':''}">${i+1}</span>
     </div>
   `).join('');
@@ -406,16 +427,22 @@ function renderNameGrid() {
 
   document.getElementById('name-grid').innerHTML = people.map((p,i) => `
     <div class="slot ${p.name ? 'has-name' : p.photo ? 'has-photo' : ''}"
-         onclick="openNameModal(${i})"
          draggable="true"
          ondragstart="dragStart(event,${i})"
          ondragover="slotDragOver(event,${i})"
          ondrop="slotDrop(event,${i})"
          ondragleave="slotDragLeave(event,${i})"
          id="name-slot-${i}">
-      ${p.photo ? `<img src="${p.photo}"><div class="overlay"></div>` : `<div class="empty-icon">📷</div>`}
+      ${p.photo
+        ? `<img src="${p.photo}">
+           <div class="overlay"></div>
+           <div class="slot-overlay-del" onclick="event.stopPropagation();deletePhotoFromNames(${i})">
+             <span class="del-btn">✕</span>
+           </div>`
+        : `<div class="empty-icon" onclick="document.getElementById('replace-input-${i}').click()">📷</div>
+           <input type="file" id="replace-input-${i}" accept="image/*" style="display:none" onchange="replacePhoto(event,${i})">`}
       ${p.name ? `<div class="check">✓</div>` : ''}
-      <div class="sname">${p.name || `#${i+1}`}</div>
+      <div class="sname" onclick="openNameModal(${i})">${p.name || `#${i+1}`}</div>
     </div>
   `).join('');
 }
@@ -493,6 +520,34 @@ async function submitOrder() {
     showToast('❌ Error submitting. Please try again.', 'error');
     btn.disabled = false; btn.textContent = '✓ Confirm & send to print';
   }
+}
+
+function deletePhotoFromNames(idx) {
+  people[idx].photo = '';
+  people[idx].file = null;
+  people[idx].name = '';
+  renderNameGrid();
+  showToast('Photo removed — tap the slot to upload a new one', '');
+}
+
+function replacePhoto(e, idx) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    people[idx].photo = ev.target.result;
+    people[idx].file = file;
+    renderNameGrid();
+    showToast('✅ Photo replaced!', 'success');
+  };
+  reader.readAsDataURL(file);
+}
+
+function deletePhoto(idx) {
+  people[idx].photo = '';
+  people[idx].file = null;
+  updateUploadProgress();
+  showToast('Photo removed — slot #'+(idx+1)+' is now empty', '');
 }
 
 function showToast(msg, type='') {
