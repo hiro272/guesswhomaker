@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Guess Who Maker</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0c0b; --surface: #161614; --surface2: #1f1f1c;
+  --border: #2c2c28; --border2: #3a3a35;
+  --text: #eeeae0; --muted: #7a7870;
+  --accent: #d4f03a; --accent2: #a8c02e;
+  --green: #1a9e70; --amber: #e8a020; --red: #e05040;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; }
+
+/* SIDEBAR */
+.sidebar {
+  width: 220px; min-height: 100vh; background: var(--surface);
+  border-right: 0.5px solid var(--border); padding: 1.5rem;
+  display: flex; flex-direction: column; gap: 0; position: fixed; top: 0; left: 0; bottom: 0;
+}
+.s-logo { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; margin-bottom: 2rem; }
+.s-logo span { color: var(--accent); }
+.s-logo small { display: block; font-size: 10px; font-weight: 400; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+.s-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.s-link {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: 8px; font-size: 14px; color: var(--muted);
+  cursor: pointer; transition: all 0.15s; border: none; background: none; font-family: 'DM Sans', sans-serif; text-align: left;
+}
+.s-link:hover { background: var(--surface2); color: var(--text); }
+.s-link.active { background: rgba(212,240,58,0.08); color: var(--accent); }
+.s-link .icon { font-size: 16px; width: 20px; text-align: center; }
+.s-section { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); padding: 16px 12px 6px; }
+
+/* MAIN */
+.main { margin-left: 220px; flex: 1; padding: 2rem; max-width: calc(100vw - 220px); }
+.topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+.topbar h1 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; }
+.badge { font-size: 11px; padding: 4px 12px; border-radius: 100px; font-weight: 500; }
+.badge-green { background: var(--green); color: #fff; }
+
+/* STATS */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 2rem; }
+.stat { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 1.25rem; }
+.stat .val { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800; line-height: 1; }
+.stat .lbl { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.stat .delta { font-size: 11px; margin-top: 8px; }
+.stat .delta.up { color: var(--green); }
+
+/* PANELS */
+.panel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 2rem; }
+.panel { background: var(--surface); border: 0.5px solid var(--border); border-radius: 14px; padding: 1.5rem; }
+.panel h3 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 1.25rem; }
+
+/* FORM FIELDS */
+.field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+.field label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.field input {
+  background: var(--surface2); border: 0.5px solid var(--border2);
+  color: var(--text); border-radius: 8px; padding: 9px 12px;
+  font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none;
+  transition: border-color 0.2s;
+}
+.field input:focus { border-color: var(--accent); }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* BUTTONS */
+.btn { padding: 9px 18px; border-radius: 100px; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; border: none; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; }
+.btn-accent { background: var(--accent); color: #0c0c0b; }
+.btn-accent:hover { background: var(--accent2); }
+.btn-sm { padding: 5px 14px; font-size: 12px; }
+.btn-outline { background: transparent; border: 0.5px solid var(--border2); color: var(--text); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.btn-ghost { background: transparent; border: none; color: var(--muted); font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; padding: 4px 8px; border-radius: 6px; }
+.btn-ghost:hover { color: var(--text); background: var(--surface2); }
+
+/* LINK BOX */
+.link-box { background: var(--surface2); border: 0.5px solid var(--border2); border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.link-url { flex: 1; font-size: 12px; color: var(--accent); font-family: monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ORDERS TABLE */
+.orders-wrap { background: var(--surface); border: 0.5px solid var(--border); border-radius: 14px; overflow: hidden; }
+.orders-header { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; border-bottom: 0.5px solid var(--border); }
+.orders-header h3 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; }
+.filter-pills { display: flex; gap: 6px; }
+.pill { font-size: 12px; padding: 4px 12px; border-radius: 100px; border: 0.5px solid var(--border2); background: transparent; color: var(--muted); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+.pill.active { background: rgba(212,240,58,0.1); border-color: var(--accent); color: var(--accent); }
+table { width: 100%; border-collapse: collapse; }
+th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); padding: 10px 16px; text-align: left; border-bottom: 0.5px solid var(--border); font-weight: 500; }
+td { padding: 14px 16px; font-size: 14px; border-bottom: 0.5px solid var(--border); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,0.015); }
+.o-id { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--accent); }
+.o-name { font-weight: 500; }
+.o-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.progress-cell { display: flex; align-items: center; gap: 8px; }
+.mini-bar { flex: 1; height: 3px; background: var(--surface2); border-radius: 2px; overflow: hidden; max-width: 80px; }
+.mini-fill { height: 100%; background: var(--accent); border-radius: 2px; }
+.status-pill { font-size: 11px; padding: 3px 10px; border-radius: 100px; font-weight: 500; white-space: nowrap; }
+.s-ready { background: rgba(26,158,112,0.15); color: var(--green); }
+.s-progress { background: rgba(212,240,58,0.1); color: var(--accent); }
+.s-waiting { background: rgba(122,120,112,0.15); color: var(--muted); }
+.actions { display: flex; gap: 6px; }
+
+/* SETTINGS TAB */
+.settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.settings-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 14px; padding: 1.5rem; }
+.settings-card h3 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 1.25rem; }
+.save-row { display: flex; justify-content: flex-end; margin-top: 12px; }
+
+/* TOAST */
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface); border: 0.5px solid var(--border2); border-radius: 100px; padding: 10px 20px; font-size: 13px; opacity: 0; transition: all 0.3s; z-index: 999; pointer-events: none; }
+.toast.show { opacity: 1; }
+.toast.success { border-color: var(--green); }
+
+/* TABS */
+.view { display: none; }
+.view.active { display: block; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="s-logo">Guess<span>Who</span><br><small>Admin · Dizing Creative</small></div>
+  <div class="s-nav">
+    <div class="s-section">Main</div>
+    <button class="s-link active" onclick="showTab('dashboard',this)"><span class="icon">📊</span> Dashboard</button>
+    <button class="s-link" onclick="showTab('orders',this)"><span class="icon">📦</span> All orders</button>
+    <button class="s-link" onclick="showTab('neworder',this)"><span class="icon">✚</span> New order link</button>
+    <div class="s-section">System</div>
+    <button class="s-link" onclick="showTab('settings',this)"><span class="icon">⚙️</span> Settings</button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- DASHBOARD -->
+  <div id="tab-dashboard" class="view active">
+    <div class="topbar">
+      <h1>Dashboard</h1>
+      <span class="badge badge-green">● Live</span>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="val">3</div><div class="lbl">Active orders</div><div class="delta up">+1 this week</div></div>
+      <div class="stat"><div class="val">1</div><div class="lbl">Ready to print</div><div class="delta up">Download PDFs</div></div>
+      <div class="stat"><div class="val">18</div><div class="lbl">Avg. photos/order</div></div>
+      <div class="stat"><div class="val">2</div><div class="lbl">Awaiting customer</div></div>
+    </div>
+
+    <div class="panel-grid">
+      <!-- Quick new link -->
+      <div class="panel">
+        <h3>Quick — generate order link</h3>
+        <div class="field-row">
+          <div class="field"><label>Customer name</label><input type="text" id="q-name" placeholder="e.g. The Smith Family"></div>
+          <div class="field"><label>Note</label><input type="text" id="q-note" placeholder="e.g. Birthday gift"></div>
+        </div>
+        <button class="btn btn-accent btn-sm" onclick="generateLink()">Generate link</button>
+        <div class="link-box" id="link-box" style="display:none">
+          <span class="link-url" id="link-url">—</span>
+          <button class="btn-ghost" onclick="copyLink()">Copy</button>
+          <button class="btn-ghost" onclick="sendWA()">WA ↗</button>
+        </div>
+      </div>
+
+      <!-- Recent activity -->
+      <div class="panel">
+        <h3>Recent activity</h3>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:10px;font-size:13px">
+            <span style="font-size:16px">🟢</span>
+            <div><div style="font-weight:500">The Oliveira Family completed</div><div style="font-size:12px;color:var(--muted)">24/24 photos · 2 hours ago</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:13px">
+            <span style="font-size:16px">📸</span>
+            <div><div style="font-weight:500">The Costa Family added 3 photos</div><div style="font-size:12px;color:var(--muted)">18/24 · 5 hours ago</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:13px">
+            <span style="font-size:16px">🔗</span>
+            <div><div style="font-weight:500">New link sent to The Mendes Family</div><div style="font-size:12px;color:var(--muted)">Yesterday · 0/24</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent orders preview -->
+    <div class="orders-wrap">
+      <div class="orders-header">
+        <h3>Recent orders</h3>
+        <button class="btn btn-outline btn-sm" onclick="showTab('orders',null)">View all →</button>
+      </div>
+      <table>
+        <thead><tr><th>Order</th><th>Customer</th><th>Progress</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="orders-tbody">
+          <tr>
+            <td class="o-id">#001</td>
+            <td><div class="o-name">The Oliveira Family</div><div class="o-sub">Completed May 27</div></td>
+            <td><div class="progress-cell"><div class="mini-bar"><div class="mini-fill" style="width:100%"></div></div><span style="font-size:12px;color:var(--muted)">24/24</span></div></td>
+            <td><span class="status-pill s-ready">Ready</span></td>
+            <td class="actions">
+              <button class="btn btn-accent btn-sm" onclick="downloadPDFs('001')">Download PDFs</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="o-id">#002</td>
+            <td><div class="o-name">The Costa Family</div><div class="o-sub">In progress</div></td>
+            <td><div class="progress-cell"><div class="mini-bar"><div class="mini-fill" style="width:75%"></div></div><span style="font-size:12px;color:var(--muted)">18/24</span></div></td>
+            <td><span class="status-pill s-progress">In progress</span></td>
+            <td class="actions">
+              <button class="btn btn-outline btn-sm" onclick="remind('The Costa Family')">Remind</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="o-id">#003</td>
+            <td><div class="o-name">The Mendes Family</div><div class="o-sub">Link sent · awaiting</div></td>
+            <td><div class="progress-cell"><div class="mini-bar"><div class="mini-fill" style="width:0%"></div></div><span style="font-size:12px;color:var(--muted)">0/24</span></div></td>
+            <td><span class="status-pill s-waiting">Waiting</span></td>
+            <td class="actions">
+              <button class="btn btn-outline btn-sm" onclick="remind('The Mendes Family')">Remind</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ALL ORDERS -->
+  <div id="tab-orders" class="view">
+    <div class="topbar">
+      <h1>All orders</h1>
+      <button class="btn btn-accent btn-sm" onclick="showTab('neworder',null)">+ New order link</button>
+    </div>
+    <div class="orders-wrap">
+      <div class="orders-header">
+        <h3>Orders</h3>
+        <div class="filter-pills">
+          <button class="pill active">All</button>
+          <button class="pill" onclick="toast('Filter: Ready','success')">Ready</button>
+          <button class="pill" onclick="toast('Filter: In progress','')">In progress</button>
+          <button class="pill" onclick="toast('Filter: Waiting','')">Waiting</button>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>Order</th><th>Customer</th><th>Game title</th><th>Progress</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="o-id">#001</td>
+            <td><div class="o-name">The Oliveira Family</div><div class="o-sub">May 27, 2025</div></td>
+            <td style="font-size:13px;color:var(--muted)">Oliveira Family 2025</td>
+            <td><div class="progress-cell"><div class="mini-bar"><div class="mini-fill" style="width:100%"></div></div><span style="font-size:12px;color:var(--muted)">24/24</span></div></td>
+            <td><span class="status-pill s-ready">Ready</span></td>
+            <td class="actions">
+              <button class="btn btn-accent btn-sm" onclick="downloadPDFs('001')">Download PDFs</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="o-id">#002</td>
+            <td><div class="o-name">The Costa Family</div><div class="o-sub">May 28, 2025</div></td>
+            <td style="font-size:13px;color:var(--muted)">Costa Christmas Game</td>
+            <td><div class="progress-cell"><div class="mini-bar"><div class="mini-fill" style="width:75%"></div></div><span style="font-size:12px;color:var(--muted)">18/24</span></div></td>
+            <td><span class="status-pill s-progress">In progress</span></td>
+            <td class="actions">
+              <button class="btn btn-outline btn-sm" onclick="remind('The Costa Family')">Remind</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="o-id">#003</td>
+            <td><div class="o-name">The Mendes Family</div><div class="o-sub">May 29, 2025</div></td>
+            <td style="font-size:13px;color:var(--muted)">—</td>
+            <td><div class="progress-cell"><div class="mini-bar"><div class="mini-fill" style="width:0%"></div></div><span style="font-size:12px;color:var(--muted)">0/24</span></div></td>
+            <td><span class="status-pill s-waiting">Waiting</span></td>
+            <td class="actions">
+              <button class="btn btn-outline btn-sm" onclick="remind('The Mendes Family')">Remind</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- NEW ORDER LINK -->
+  <div id="tab-neworder" class="view">
+    <div class="topbar"><h1>New order link</h1></div>
+    <div class="panel" style="max-width:520px">
+      <h3>Generate a unique link for your customer</h3>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:1.25rem;line-height:1.6">Each customer gets their own private link. They upload 24 photos, confirm, and you get notified on WhatsApp.</p>
+      <div class="field-row">
+        <div class="field"><label>Customer name</label><input type="text" id="nl-name" placeholder="e.g. The Smith Family"></div>
+        <div class="field"><label>Your note (internal)</label><input type="text" id="nl-note" placeholder="e.g. Birthday gift, June"></div>
+      </div>
+      <div class="field"><label>Customer WhatsApp (optional)</label><input type="text" id="nl-phone" placeholder="+1 555 000-0000"></div>
+      <button class="btn btn-accent" onclick="generateLinkFull()">Generate link</button>
+      <div class="link-box" id="link-box2" style="display:none">
+        <span class="link-url" id="link-url2">—</span>
+        <button class="btn-ghost" onclick="copyLink2()">Copy</button>
+        <button class="btn-ghost" onclick="sendWAFull()">Send via WhatsApp ↗</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="tab-settings" class="view">
+    <div class="topbar"><h1>Settings</h1></div>
+    <div class="settings-grid">
+      <div class="settings-card">
+        <h3>Your contact info</h3>
+        <div class="field"><label>Business name</label><input type="text" id="s-biz" value="Dizing Creative"></div>
+        <div class="field"><label>Your WhatsApp</label><input type="text" id="s-wa" placeholder="+1 555 000-0000"></div>
+        <div class="field"><label>Your email</label><input type="text" id="s-email" placeholder="you@email.com"></div>
+        <div class="save-row"><button class="btn btn-accent btn-sm" onclick="saveSettings()">Save</button></div>
+      </div>
+      <div class="settings-card">
+        <h3>CallMeBot (WhatsApp alerts)</h3>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:1rem;line-height:1.6">To receive WhatsApp notifications when a customer completes an order, configure your CallMeBot API key below.</p>
+        <div class="field"><label>CallMeBot API key</label><input type="text" id="s-cmb" placeholder="Paste your key here"></div>
+        <div class="field"><label>Phone number registered with CallMeBot</label><input type="text" id="s-cmbphone" placeholder="+1 555 000-0000"></div>
+        <div class="save-row"><button class="btn btn-accent btn-sm" onclick="saveSettings()">Save</button></div>
+      </div>
+      <div class="settings-card">
+        <h3>Supabase database</h3>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:1rem;line-height:1.6">Connect your Supabase project to store orders and photos.</p>
+        <div class="field"><label>Supabase URL</label><input type="text" id="s-url" placeholder="https://xxxx.supabase.co"></div>
+        <div class="field"><label>Anon public key</label><input type="text" id="s-key" placeholder="eyJ..."></div>
+        <div class="save-row"><button class="btn btn-accent btn-sm" onclick="saveSettings()">Save</button></div>
+      </div>
+      <div class="settings-card">
+        <h3>App URL & deployment</h3>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:1rem;line-height:1.6">Your live app URL after deploying to Vercel.</p>
+        <div class="field"><label>App URL</label><input type="text" id="s-appurl" value="https://guesswhomaker.vercel.app"></div>
+        <div class="field"><label>Admin password</label><input type="password" id="s-pass" placeholder="Set a secure password"></div>
+        <div class="save-row"><button class="btn btn-accent btn-sm" onclick="saveSettings()">Save</button></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- TOAST -->
+<div class="toast" id="toast-el"></div>
+
+<script>
+function showTab(name, el) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  document.querySelectorAll('.s-link').forEach(l=>l.classList.remove('active'));
+  if(el) el.classList.add('active');
+}
+
+function generateLink() {
+  const name = document.getElementById('q-name').value.trim();
+  if(!name){ toast('Enter the customer name first'); return; }
+  const id = Math.random().toString(36).slice(2,8).toUpperCase();
+  const url = `https://guesswhomaker.vercel.app/?order=${id}`;
+  document.getElementById('link-url').textContent = url;
+  document.getElementById('link-box').style.display = 'flex';
+  toast('✅ Link generated for '+name, 'success');
+}
+
+function generateLinkFull() {
+  const name = document.getElementById('nl-name').value.trim();
+  if(!name){ toast('Enter the customer name first'); return; }
+  const id = Math.random().toString(36).slice(2,8).toUpperCase();
+  const url = `https://guesswhomaker.vercel.app/?order=${id}`;
+  document.getElementById('link-url2').textContent = url;
+  document.getElementById('link-box2').style.display = 'flex';
+  toast('✅ Link generated!', 'success');
+}
+
+function copyLink() {
+  navigator.clipboard.writeText(document.getElementById('link-url').textContent).catch(()=>{});
+  toast('📋 Link copied!', 'success');
+}
+function copyLink2() {
+  navigator.clipboard.writeText(document.getElementById('link-url2').textContent).catch(()=>{});
+  toast('📋 Link copied!', 'success');
+}
+
+function sendWA() {
+  const url = document.getElementById('link-url').textContent;
+  const name = document.getElementById('q-name').value;
+  const msg = encodeURIComponent(`Hi ${name}! 🎲 Click the link below to add your 24 photos for your custom family Guess Who game:\n\n${url}\n\n— Dizing Creative`);
+  window.open('https://wa.me/?text='+msg,'_blank');
+}
+function sendWAFull() {
+  const url = document.getElementById('link-url2').textContent;
+  const name = document.getElementById('nl-name').value;
+  const phone = document.getElementById('nl-phone').value.replace(/\D/g,'');
+  const msg = encodeURIComponent(`Hi ${name}! 🎲 Click the link below to add your 24 photos for your custom family Guess Who game:\n\n${url}\n\n— Dizing Creative`);
+  const waUrl = phone ? `https://wa.me/${phone}?text=${msg}` : `https://wa.me/?text=${msg}`;
+  window.open(waUrl,'_blank');
+}
+
+function downloadPDFs(id) {
+  toast('📄 Downloading PDFs for order #'+id+'...', 'success');
+}
+
+function remind(name) {
+  toast('📲 Reminder sent to '+name+' via WhatsApp!', 'success');
+}
+
+function saveSettings() {
+  toast('✅ Settings saved!', 'success');
+}
+
+function toast(msg, type='') {
+  const t = document.getElementById('toast-el');
+  t.textContent = msg;
+  t.className = 'toast show'+(type?' '+type:'');
+  setTimeout(()=>t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>

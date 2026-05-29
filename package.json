@@ -1,0 +1,12 @@
+{
+  "name": "guesswhomaker",
+  "version": "1.0.0",
+  "description": "Guess Who Maker — Dizing Creative",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.38.0",
+    "jspdf": "^2.5.1"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}

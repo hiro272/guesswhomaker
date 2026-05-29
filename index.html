@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guess Who Maker — Dizing Creative</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0c0b;
+  --surface: #161614;
+  --surface2: #1f1f1c;
+  --border: #2c2c28;
+  --border2: #3a3a35;
+  --text: #eeeae0;
+  --muted: #7a7870;
+  --accent: #d4f03a;
+  --accent2: #a8c02e;
+  --green: #1a9e70;
+  --green-light: rgba(26,158,112,0.12);
+  --red: #e05040;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 3rem 2rem;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(212,240,58,0.06) 0%, transparent 70%),
+    var(--bg);
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+.brand { font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; margin-bottom: 2rem; }
+.brand span { color: var(--accent); }
+.hero h1 {
+  font-family: 'Syne', sans-serif; font-size: clamp(44px, 8vw, 80px);
+  font-weight: 800; line-height: 0.95; letter-spacing: -3px;
+  margin-bottom: 1.5rem;
+}
+.hero h1 em { color: var(--accent); font-style: normal; }
+.hero p { font-size: 17px; color: var(--muted); max-width: 420px; line-height: 1.6; margin-bottom: 2.5rem; }
+.hero-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--accent); color: #0c0c0b;
+  font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700;
+  padding: 14px 28px; border-radius: 100px; border: none; cursor: pointer;
+  transition: transform 0.2s, background 0.2s; text-decoration: none;
+}
+.hero-btn:hover { background: var(--accent2); transform: translateY(-2px); }
+.hero-steps { display: flex; gap: 32px; margin-top: 3rem; flex-wrap: wrap; justify-content: center; }
+.hero-step { text-align: center; }
+.hero-step .num { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--accent); line-height: 1; }
+.hero-step .label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+/* FORM SECTION */
+.form-section { max-width: 800px; margin: 0 auto; padding: 4rem 2rem; display: none; }
+.form-section.active { display: block; }
+
+/* PROGRESS BAR */
+.progress-wrap { margin-bottom: 2.5rem; }
+.steps-nav { display: flex; align-items: center; gap: 0; margin-bottom: 1rem; }
+.step-dot { display: flex; align-items: center; gap: 0; }
+.step-dot .dot {
+  width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--muted);
+  transition: all 0.3s;
+}
+.step-dot.active .dot { border-color: var(--accent); color: var(--accent); background: rgba(212,240,58,0.08); }
+.step-dot.done .dot { border-color: var(--green); background: var(--green); color: #fff; }
+.step-dot .dot-label { font-size: 12px; color: var(--muted); margin-left: 8px; white-space: nowrap; }
+.step-dot.active .dot-label { color: var(--text); }
+.step-line { flex: 1; height: 1px; background: var(--border); margin: 0 12px; min-width: 20px; }
+
+/* CARDS */
+.card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+.card h2 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+.card p { font-size: 14px; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 12px; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; }
+.field input {
+  background: var(--surface2); border: 0.5px solid var(--border2);
+  color: var(--text); border-radius: 10px; padding: 11px 14px;
+  font-size: 15px; font-family: 'DM Sans', sans-serif; outline: none;
+  transition: border-color 0.2s;
+}
+.field input:focus { border-color: var(--accent); }
+.field.full { grid-column: 1/-1; }
+
+/* PHOTO GRID */
+.prog-info { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.prog-bar { height: 3px; background: var(--surface2); border-radius: 2px; margin-bottom: 1.5rem; overflow: hidden; }
+.prog-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s cubic-bezier(.4,0,.2,1); }
+
+.photo-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+@media (max-width: 600px) { .photo-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 400px) { .photo-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.slot {
+  aspect-ratio: 2/3; border-radius: 10px; border: 1px dashed var(--border2);
+  background: var(--surface); cursor: pointer; position: relative;
+  overflow: hidden; transition: border-color 0.2s, transform 0.15s;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.slot:hover { border-color: var(--accent); transform: scale(1.03); }
+.slot.filled { border-style: solid; border-color: var(--green); }
+.slot .plus { font-size: 20px; opacity: 0.2; transition: opacity 0.2s; }
+.slot:hover .plus { opacity: 0.5; }
+.slot .snum { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+.slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.slot .overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%); }
+.slot .sname { position: absolute; bottom: 5px; left: 0; right: 0; text-align: center; font-size: 8px; font-weight: 500; padding: 0 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.slot .check { position: absolute; top: 5px; right: 5px; width: 16px; height: 16px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; font-size: 9px; z-index: 2; }
+
+/* REVIEW GRID */
+.review-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 1.5rem; }
+@media (max-width: 600px) { .review-grid { grid-template-columns: repeat(4, 1fr); } }
+.rev-card { background: var(--surface2); border: 0.5px solid var(--border); border-radius: 8px; aspect-ratio: 2/3; overflow: hidden; display: flex; flex-direction: column; }
+.rev-card .ri { flex: 1; background: var(--surface); overflow: hidden; }
+.rev-card .ri img { width: 100%; height: 100%; object-fit: cover; }
+.rev-card .rn { font-size: 7px; font-weight: 500; text-align: center; padding: 3px 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* DONE */
+.done-wrap { text-align: center; padding: 3rem 1rem; }
+.done-wrap .big-icon { font-size: 64px; margin-bottom: 1.5rem; animation: pop 0.5s cubic-bezier(.36,.07,.19,.97); }
+@keyframes pop { 0%{transform:scale(0.5);opacity:0} 80%{transform:scale(1.15)} 100%{transform:scale(1);opacity:1} }
+.done-wrap h2 { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; margin-bottom: 8px; }
+.done-wrap p { font-size: 15px; color: var(--muted); max-width: 360px; margin: 0 auto 2rem; line-height: 1.6; }
+.order-number { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 1.25rem; display: inline-block; margin-bottom: 2rem; min-width: 220px; }
+.order-number .label { font-size: 12px; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; }
+.order-number .num { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--accent); }
+
+/* BUTTONS */
+.btn { padding: 12px 24px; border-radius: 100px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; border: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+.btn-accent { background: var(--accent); color: #0c0c0b; }
+.btn-accent:hover { background: var(--accent2); transform: translateY(-1px); }
+.btn-accent:disabled { opacity: 0.35; pointer-events: none; }
+.btn-outline { background: transparent; border: 0.5px solid var(--border2); color: var(--text); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.btn-green { background: var(--green); color: #fff; }
+.btn-green:hover { background: #158f63; transform: translateY(-1px); }
+.btn-full { width: 100%; justify-content: center; }
+.btn-row { display: flex; gap: 10px; }
+
+/* MODAL */
+.modal-bg {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75); z-index: 300;
+  align-items: center; justify-content: center; padding: 1rem;
+  backdrop-filter: blur(4px);
+}
+.modal-bg.open { display: flex; }
+.modal { background: var(--surface); border: 0.5px solid var(--border2); border-radius: 20px; padding: 1.75rem; width: 100%; max-width: 340px; }
+.modal h3 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 1.25rem; }
+.upload-zone {
+  height: 130px; border: 1.5px dashed var(--border2); border-radius: 12px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 8px; cursor: pointer; font-size: 13px; color: var(--muted);
+  overflow: hidden; margin-bottom: 14px; transition: border-color 0.2s;
+}
+.upload-zone:hover { border-color: var(--accent); }
+.upload-zone img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
+.modal-actions { display: flex; gap: 8px; margin-top: 14px; }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--surface); border: 0.5px solid var(--border2); border-radius: 100px;
+  padding: 10px 20px; font-size: 13px; white-space: nowrap;
+  opacity: 0; transition: all 0.3s; z-index: 999; pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.success { border-color: var(--green); }
+
+/* FOOTER */
+footer { text-align: center; padding: 2rem; font-size: 12px; color: var(--muted); border-top: 0.5px solid var(--border); }
+footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <p class="brand">by <span>Dizing Creative</span></p>
+  <h1>Your Family<br><em>Guess Who</em><br>Game</h1>
+  <p>Upload 24 photos, add names, and we'll print your custom family board game.</p>
+  <a href="#" class="hero-btn" id="start-btn" onclick="startFlow()">
+    Get started →
+  </a>
+  <div class="hero-steps">
+    <div class="hero-step"><div class="num">01</div><div class="label">Fill your details</div></div>
+    <div class="hero-step"><div class="num">02</div><div class="label">Upload 24 photos</div></div>
+    <div class="hero-step"><div class="num">03</div><div class="label">Review & confirm</div></div>
+    <div class="hero-step"><div class="num">04</div><div class="label">We print & deliver</div></div>
+  </div>
+</section>
+
+<!-- FORM FLOW -->
+<div class="form-section" id="form-section">
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="steps-nav">
+      <div class="step-dot active" id="sd1">
+        <div class="dot">1</div>
+        <span class="dot-label">Your info</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-dot" id="sd2">
+        <div class="dot">2</div>
+        <span class="dot-label">Photos</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-dot" id="sd3">
+        <div class="dot">3</div>
+        <span class="dot-label">Review</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-dot" id="sd4">
+        <div class="dot">4</div>
+        <span class="dot-label">Done!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div id="step1">
+    <div class="card">
+      <h2>Your order details</h2>
+      <p>Tell us who this game is for — we'll use this to personalise the packaging and notify you when it's ready.</p>
+      <div class="field-row">
+        <div class="field"><label>Your name</label><input type="text" id="c-name" placeholder="e.g. Maria Silva"></div>
+        <div class="field"><label>Your WhatsApp</label><input type="text" id="c-phone" placeholder="+1 555 000-0000"></div>
+      </div>
+      <div class="field full" style="margin-bottom:0">
+        <label>Game title</label>
+        <input type="text" id="c-title" placeholder="e.g. The Smith Family — Christmas 2025">
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goHero()">← Back</button>
+      <button class="btn btn-accent" style="flex:1" onclick="goStep(2)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div id="step2" style="display:none">
+    <div class="card">
+      <h2>Add your 24 people</h2>
+      <p>Tap each slot to upload a photo and add the person's name. All 24 must be filled before continuing.</p>
+      <div class="prog-info">
+        <span id="prog-text">0 of 24 added</span>
+        <span id="prog-pct">0%</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+      <div class="photo-grid" id="photo-grid"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goStep(1)">← Back</button>
+      <button class="btn btn-accent" id="btn-review" style="flex:1" onclick="goStep(3)" disabled>Review →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div id="step3" style="display:none">
+    <div class="card">
+      <h2>Final review</h2>
+      <p>Check all 24 people before submitting. You can go back to edit any slot.</p>
+      <div class="review-grid" id="review-grid"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goStep(2)">← Edit</button>
+      <button class="btn btn-green" style="flex:1" id="btn-submit" onclick="submitOrder()">
+        ✓ Confirm & send to print
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div id="step4" style="display:none">
+    <div class="done-wrap">
+      <div class="big-icon">🎉</div>
+      <h2>Order submitted!</h2>
+      <p>We received everything! Dizing Creative will be in touch via WhatsApp once your game is printed and ready.</p>
+      <div class="order-number">
+        <div class="label">Order number</div>
+        <div class="num" id="order-num">#—</div>
+      </div>
+      <p style="font-size:13px;color:var(--muted)">Save this number for reference.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  Made with ❤️ by <a href="#">Dizing Creative</a>
+</footer>
+
+<!-- PHOTO MODAL -->
+<div class="modal-bg" id="photo-modal">
+  <div class="modal">
+    <h3 id="pm-title">Person 1</h3>
+    <div class="field" style="margin-bottom:12px">
+      <label>Full name</label>
+      <input type="text" id="pm-name" placeholder="e.g. Grandma Mary" maxlength="24">
+    </div>
+    <div class="upload-zone" id="pm-zone" onclick="document.getElementById('pm-file').click()">
+      <span style="font-size:32px">📷</span>
+      <span>Tap to choose a photo</span>
+    </div>
+    <input type="file" id="pm-file" accept="image/*" style="display:none" onchange="handlePhoto(event)">
+    <div class="modal-actions">
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-accent" style="flex:1" onclick="saveSlot()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const people = Array.from({length:24},(_,i)=>({id:i,name:'',photo:'',file:null}));
+let editSlot=null, tempPhoto='', tempFile=null;
+
+// Get order ID from URL ?order=XXXX
+const params = new URLSearchParams(window.location.search);
+const orderId = params.get('order') || 'DIRECT';
+
+function startFlow() {
+  document.getElementById('hero').style.display = 'none';
+  document.getElementById('form-section').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function goHero() {
+  document.getElementById('hero').style.display = '';
+  document.getElementById('form-section').classList.remove('active');
+  window.scrollTo(0,0);
+}
+
+function goStep(n) {
+  [1,2,3,4].forEach(i => {
+    document.getElementById('step'+i).style.display = i===n ? 'block' : 'none';
+    const sd = document.getElementById('sd'+i);
+    sd.classList.remove('active','done');
+    if(i===n) sd.classList.add('active');
+    else if(i<n) sd.classList.add('done');
+  });
+  if(n===2) renderGrid();
+  if(n===3) renderReview();
+  window.scrollTo(0,0);
+}
+
+function renderGrid() {
+  const filled = people.filter(p=>p.name).length;
+  const pct = Math.round(filled/24*100);
+  document.getElementById('prog-fill').style.width = pct+'%';
+  document.getElementById('prog-text').textContent = filled+' of 24 added';
+  document.getElementById('prog-pct').textContent = pct+'%';
+  document.getElementById('btn-review').disabled = filled < 24;
+
+  document.getElementById('photo-grid').innerHTML = people.map(p => `
+    <div class="slot ${p.name?'filled':''}" onclick="openModal(${p.id})">
+      ${p.photo?`<img src="${p.photo}"><div class="overlay"></div><div class="check">✓</div><div class="sname">${p.name}</div>`:`<div class="snum">#${p.id+1}</div><div class="plus">+</div>`}
+    </div>
+  `).join('');
+}
+
+function renderReview() {
+  document.getElementById('review-grid').innerHTML = people.map(p => `
+    <div class="rev-card">
+      <div class="ri">${p.photo?`<img src="${p.photo}">`:'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:.3">👤</div>'}</div>
+      <div class="rn">${p.name||'—'}</div>
+    </div>
+  `).join('');
+}
+
+function openModal(id) {
+  editSlot=id; tempPhoto=people[id].photo; tempFile=people[id].file;
+  document.getElementById('pm-title').textContent = 'Person '+(id+1);
+  document.getElementById('pm-name').value = people[id].name;
+  const z = document.getElementById('pm-zone');
+  z.innerHTML = tempPhoto
+    ? `<img src="${tempPhoto}">`
+    : `<span style="font-size:32px">📷</span><span>Tap to choose a photo</span>`;
+  document.getElementById('photo-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('pm-name').focus(),100);
+}
+
+function closeModal() {
+  document.getElementById('photo-modal').classList.remove('open');
+  tempPhoto=''; tempFile=null;
+  document.getElementById('pm-file').value='';
+}
+
+function handlePhoto(e) {
+  const file = e.target.files[0]; if(!file) return;
+  tempFile = file;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    tempPhoto = ev.target.result;
+    document.getElementById('pm-zone').innerHTML = `<img src="${tempPhoto}">`;
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveSlot() {
+  const name = document.getElementById('pm-name').value.trim();
+  if(!name){ document.getElementById('pm-name').focus(); return; }
+  people[editSlot].name = name;
+  people[editSlot].photo = tempPhoto;
+  people[editSlot].file = tempFile;
+  closeModal();
+  renderGrid();
+  showToast('✅ '+name+' saved!', 'success');
+}
+
+async function submitOrder() {
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.textContent = 'Uploading photos...';
+
+  try {
+    const formData = new FormData();
+    formData.append('orderId', orderId);
+    formData.append('clientName', document.getElementById('c-name').value);
+    formData.append('clientPhone', document.getElementById('c-phone').value);
+    formData.append('gameTitle', document.getElementById('c-title').value);
+
+    const peopleData = people.map(p => ({id:p.id, name:p.name}));
+    formData.append('people', JSON.stringify(peopleData));
+
+    people.forEach(p => {
+      if(p.file) formData.append(`photo_${p.id}`, p.file, `slot${p.id}.jpg`);
+    });
+
+    const res = await fetch('/api/submit-order', { method: 'POST', body: formData });
+    const data = await res.json();
+
+    if(data.success) {
+      document.getElementById('order-num').textContent = '#'+data.orderNumber;
+      goStep(4);
+    } else {
+      throw new Error(data.error || 'Unknown error');
+    }
+  } catch(err) {
+    console.error(err);
+    showToast('❌ Error submitting. Please try again.', 'error');
+    btn.disabled = false;
+    btn.textContent = '✓ Confirm & send to print';
+  }
+}
+
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show'+(type?' '+type:'');
+  setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+document.getElementById('photo-modal').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
+document.getElementById('pm-name').addEventListener('keydown', e=>{ if(e.key==='Enter') saveSlot(); });
+</script>
+</body>
+</html>
