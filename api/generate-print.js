@@ -121,7 +121,6 @@ function generateBoard(people, gameTitle, orderNumber) {
           : `<div class="no-photo">${i+1}</div>`}
       </div>
       <div class="slot-name">${p.name}</div>
-      <div class="slot-flap"></div>
     </div>`).join('');
 
   return `<!DOCTYPE html><html><head><meta charset="UTF-8">
@@ -151,8 +150,6 @@ function generateBoard(people, gameTitle, orderNumber) {
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
     }
     .slot-photo {
       flex: 1;
@@ -177,7 +174,7 @@ function generateBoard(people, gameTitle, orderNumber) {
       font-size: 5pt;
       font-weight: 700;
       text-align: center;
-      padding: 1mm 0.5mm;
+      padding: 1.5mm 0.5mm;
       background: white;
       white-space: nowrap;
       overflow: hidden;
@@ -185,16 +182,6 @@ function generateBoard(people, gameTitle, orderNumber) {
       color: #111;
       border-top: 0.5px solid #ccc;
       flex-shrink: 0;
-    }
-    .slot-flap {
-      height: 7mm;
-      min-height: 7mm;
-      background: #111 !important;
-      border-top: 1px solid #000;
-      flex-shrink: 0;
-      display: block;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
     }
     .footer {
       margin-top: 3mm;
