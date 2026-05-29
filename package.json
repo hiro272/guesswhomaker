@@ -4,9 +4,10 @@
   "description": "Guess Who Maker — Dizing Creative",
   "dependencies": {
     "@supabase/supabase-js": "^2.38.0",
-    "jspdf": "^2.5.1"
+    "jspdf": "^2.5.1",
+    "resend": "^2.0.0"
   },
   "engines": {
-    "node": "18.x"
+    "node": "24.x"
   }
 }
