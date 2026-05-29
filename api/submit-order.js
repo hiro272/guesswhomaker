@@ -101,7 +101,7 @@ export default async function handler(req, res) {
               <div style="font-size:22px;font-weight:800;letter-spacing:-1px">
                 Guess<span style="color:#d4f03a">Who</span>.maker
               </div>
-              <div style="font-size:12px;color:#7a7870;margin-top:2px">Dizing Creative</div>
+              <div style="font-size:12px;color:#7a7870;margin-top:2px">GuessWho.maker</div>
             </div>
 
             <!-- Alert box -->
@@ -142,7 +142,7 @@ export default async function handler(req, res) {
 
             <!-- Footer -->
             <div style="text-align:center;font-size:12px;color:#7a7870;padding-top:16px;border-top:0.5px solid #2c2c28">
-              Guess Who Maker · Dizing Creative
+              Guess Who Maker · GuessWho.maker
             </div>
           </div>
         </body>
