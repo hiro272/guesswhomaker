@@ -7,76 +7,47 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0c0c0b;
-  --surface: #161614;
-  --surface2: #1f1f1c;
-  --border: #2c2c28;
-  --border2: #3a3a35;
-  --text: #eeeae0;
-  --muted: #7a7870;
-  --accent: #d4f03a;
-  --accent2: #a8c02e;
-  --green: #1a9e70;
-  --green-light: rgba(26,158,112,0.12);
-  --red: #e05040;
+  --bg: #0c0c0b; --surface: #161614; --surface2: #1f1f1c;
+  --border: #2c2c28; --border2: #3a3a35;
+  --text: #eeeae0; --muted: #7a7870;
+  --accent: #d4f03a; --accent2: #a8c02e;
+  --green: #1a9e70; --red: #e05040;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
 body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
 /* HERO */
 .hero {
-  min-height: 100vh;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
   text-align: center; padding: 3rem 2rem;
-  background:
-    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(212,240,58,0.06) 0%, transparent 70%),
-    var(--bg);
+  background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(212,240,58,0.06) 0%, transparent 70%), var(--bg);
   position: relative; overflow: hidden;
 }
 .hero::before {
-  content: '';
-  position: absolute; inset: 0;
+  content: ''; position: absolute; inset: 0;
   background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
-  background-size: 32px 32px;
-  pointer-events: none;
+  background-size: 32px 32px; pointer-events: none;
 }
-.brand { font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; margin-bottom: 2rem; }
+.brand { font-size: 12px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; margin-bottom: 2rem; }
 .brand span { color: var(--accent); }
-.hero h1 {
-  font-family: 'Syne', sans-serif; font-size: clamp(44px, 8vw, 80px);
-  font-weight: 800; line-height: 0.95; letter-spacing: -3px;
-  margin-bottom: 1.5rem;
-}
+.hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(44px,8vw,80px); font-weight: 800; line-height: 0.95; letter-spacing: -3px; margin-bottom: 1.5rem; }
 .hero h1 em { color: var(--accent); font-style: normal; }
 .hero p { font-size: 17px; color: var(--muted); max-width: 420px; line-height: 1.6; margin-bottom: 2.5rem; }
-.hero-btn {
-  display: inline-flex; align-items: center; gap: 10px;
-  background: var(--accent); color: #0c0c0b;
-  font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700;
-  padding: 14px 28px; border-radius: 100px; border: none; cursor: pointer;
-  transition: transform 0.2s, background 0.2s; text-decoration: none;
-}
+.hero-btn { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: #0c0c0b; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; padding: 14px 28px; border-radius: 100px; border: none; cursor: pointer; transition: transform 0.2s, background 0.2s; text-decoration: none; }
 .hero-btn:hover { background: var(--accent2); transform: translateY(-2px); }
 .hero-steps { display: flex; gap: 32px; margin-top: 3rem; flex-wrap: wrap; justify-content: center; }
-.hero-step { text-align: center; }
 .hero-step .num { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--accent); line-height: 1; }
 .hero-step .label { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
-/* FORM SECTION */
-.form-section { max-width: 800px; margin: 0 auto; padding: 4rem 2rem; display: none; }
+/* FORM */
+.form-section { max-width: 860px; margin: 0 auto; padding: 2rem; display: none; }
 .form-section.active { display: block; }
 
-/* PROGRESS BAR */
-.progress-wrap { margin-bottom: 2.5rem; }
-.steps-nav { display: flex; align-items: center; gap: 0; margin-bottom: 1rem; }
+/* STEPS NAV */
+.steps-nav { display: flex; align-items: center; gap: 0; margin-bottom: 2rem; }
 .step-dot { display: flex; align-items: center; gap: 0; }
-.step-dot .dot {
-  width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--border2);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--muted);
-  transition: all 0.3s;
-}
+.step-dot .dot { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--border2); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--muted); transition: all 0.3s; }
 .step-dot.active .dot { border-color: var(--accent); color: var(--accent); background: rgba(212,240,58,0.08); }
 .step-dot.done .dot { border-color: var(--green); background: var(--green); color: #fff; }
 .step-dot .dot-label { font-size: 12px; color: var(--muted); margin-left: 8px; white-space: nowrap; }
@@ -84,45 +55,55 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .step-line { flex: 1; height: 1px; background: var(--border); margin: 0 12px; min-width: 20px; }
 
 /* CARDS */
-.card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+.card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1.5rem; }
 .card h2 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 6px; }
 .card p { font-size: 14px; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
 .field { display: flex; flex-direction: column; gap: 6px; }
 .field label { font-size: 12px; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; }
-.field input {
-  background: var(--surface2); border: 0.5px solid var(--border2);
-  color: var(--text); border-radius: 10px; padding: 11px 14px;
-  font-size: 15px; font-family: 'DM Sans', sans-serif; outline: none;
-  transition: border-color 0.2s;
-}
+.field input { background: var(--surface2); border: 0.5px solid var(--border2); color: var(--text); border-radius: 10px; padding: 11px 14px; font-size: 15px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s; }
 .field input:focus { border-color: var(--accent); }
 .field.full { grid-column: 1/-1; }
 
-/* PHOTO GRID */
-.prog-info { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+/* UPLOAD ZONE */
+.upload-zone-big {
+  border: 2px dashed var(--border2); border-radius: 16px;
+  padding: 3rem 2rem; text-align: center; cursor: pointer;
+  transition: all 0.2s; position: relative; margin-bottom: 1.5rem;
+}
+.upload-zone-big:hover, .upload-zone-big.drag { border-color: var(--accent); background: rgba(212,240,58,0.03); }
+.upload-zone-big .uz-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.4; }
+.upload-zone-big h3 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.upload-zone-big p { font-size: 14px; color: var(--muted); margin: 0; }
+.upload-zone-big input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+
+/* PROGRESS */
+.prog-info { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
 .prog-bar { height: 3px; background: var(--surface2); border-radius: 2px; margin-bottom: 1.5rem; overflow: hidden; }
 .prog-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s cubic-bezier(.4,0,.2,1); }
 
+/* PHOTO GRID */
 .photo-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
 @media (max-width: 600px) { .photo-grid { grid-template-columns: repeat(4, 1fr); } }
 @media (max-width: 400px) { .photo-grid { grid-template-columns: repeat(3, 1fr); } }
 
 .slot {
-  aspect-ratio: 2/3; border-radius: 10px; border: 1px dashed var(--border2);
-  background: var(--surface); cursor: pointer; position: relative;
+  aspect-ratio: 2/3; border-radius: 10px; border: 1px solid var(--border2);
+  background: var(--surface2); cursor: pointer; position: relative;
   overflow: hidden; transition: border-color 0.2s, transform 0.15s;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
 .slot:hover { border-color: var(--accent); transform: scale(1.03); }
-.slot.filled { border-style: solid; border-color: var(--green); }
-.slot .plus { font-size: 20px; opacity: 0.2; transition: opacity 0.2s; }
-.slot:hover .plus { opacity: 0.5; }
-.slot .snum { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+.slot.has-photo { border-color: var(--border); }
+.slot.has-name { border-color: var(--green); }
+.slot.dragging { opacity: 0.4; transform: scale(0.95); }
+.slot.drag-over { border-color: var(--accent); transform: scale(1.05); }
 .slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.slot .overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%); }
-.slot .sname { position: absolute; bottom: 5px; left: 0; right: 0; text-align: center; font-size: 8px; font-weight: 500; padding: 0 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.slot .overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 55%); }
+.slot .sname { position: absolute; bottom: 5px; left: 0; right: 0; text-align: center; font-size: 8px; font-weight: 600; padding: 0 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.slot .snum { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; color: var(--muted); }
 .slot .check { position: absolute; top: 5px; right: 5px; width: 16px; height: 16px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; font-size: 9px; z-index: 2; }
+.slot .empty-icon { font-size: 18px; opacity: 0.15; }
 
 /* REVIEW GRID */
 .review-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 1.5rem; }
@@ -154,37 +135,23 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .btn-full { width: 100%; justify-content: center; }
 .btn-row { display: flex; gap: 10px; }
 
-/* MODAL */
-.modal-bg {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.75); z-index: 300;
-  align-items: center; justify-content: center; padding: 1rem;
-  backdrop-filter: blur(4px);
-}
+/* NAME MODAL */
+.modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 300; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(4px); }
 .modal-bg.open { display: flex; }
-.modal { background: var(--surface); border: 0.5px solid var(--border2); border-radius: 20px; padding: 1.75rem; width: 100%; max-width: 340px; }
-.modal h3 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 1.25rem; }
-.upload-zone {
-  height: 130px; border: 1.5px dashed var(--border2); border-radius: 12px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 8px; cursor: pointer; font-size: 13px; color: var(--muted);
-  overflow: hidden; margin-bottom: 14px; transition: border-color 0.2s;
-}
-.upload-zone:hover { border-color: var(--accent); }
-.upload-zone img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
+.modal { background: var(--surface); border: 0.5px solid var(--border2); border-radius: 20px; padding: 1.75rem; width: 100%; max-width: 320px; }
+.modal-thumb { width: 80px; height: 106px; border-radius: 10px; object-fit: cover; display: block; margin: 0 auto 1rem; border: 0.5px solid var(--border2); }
+.modal-thumb-empty { width: 80px; height: 106px; border-radius: 10px; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 1rem; opacity: 0.4; }
+.modal h3 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 1rem; text-align: center; }
 .modal-actions { display: flex; gap: 8px; margin-top: 14px; }
 
 /* TOAST */
-.toast {
-  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
-  background: var(--surface); border: 0.5px solid var(--border2); border-radius: 100px;
-  padding: 10px 20px; font-size: 13px; white-space: nowrap;
-  opacity: 0; transition: all 0.3s; z-index: 999; pointer-events: none;
-}
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface); border: 0.5px solid var(--border2); border-radius: 100px; padding: 10px 20px; font-size: 13px; white-space: nowrap; opacity: 0; transition: all 0.3s; z-index: 999; pointer-events: none; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 .toast.success { border-color: var(--green); }
 
-/* FOOTER */
+/* HINT */
+.hint { font-size: 12px; color: var(--muted); background: var(--surface2); border-radius: 8px; padding: 8px 12px; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+
 footer { text-align: center; padding: 2rem; font-size: 12px; color: var(--muted); border-top: 0.5px solid var(--border); }
 footer a { color: var(--accent); text-decoration: none; }
 </style>
@@ -195,50 +162,35 @@ footer a { color: var(--accent); text-decoration: none; }
 <section class="hero" id="hero">
   <p class="brand">by <span>GuessWho.maker</span></p>
   <h1>Your Family<br><em>Guess Who</em><br>Game</h1>
-  <p>Upload 24 photos, add names, and we'll print your custom family board game.</p>
-  <a href="#" class="hero-btn" id="start-btn" onclick="startFlow()">
-    Get started →
-  </a>
+  <p>Upload all 24 photos at once, name each person, and we'll print your custom family board game.</p>
+  <a href="#" class="hero-btn" onclick="startFlow();return false;">Get started →</a>
   <div class="hero-steps">
     <div class="hero-step"><div class="num">01</div><div class="label">Fill your details</div></div>
-    <div class="hero-step"><div class="num">02</div><div class="label">Upload 24 photos</div></div>
-    <div class="hero-step"><div class="num">03</div><div class="label">Review & confirm</div></div>
-    <div class="hero-step"><div class="num">04</div><div class="label">We print & deliver</div></div>
+    <div class="hero-step"><div class="num">02</div><div class="label">Upload all 24 photos</div></div>
+    <div class="hero-step"><div class="num">03</div><div class="label">Name each person</div></div>
+    <div class="hero-step"><div class="num">04</div><div class="label">Confirm & we print!</div></div>
   </div>
 </section>
 
-<!-- FORM FLOW -->
+<!-- FORM -->
 <div class="form-section" id="form-section">
-  <!-- PROGRESS -->
-  <div class="progress-wrap">
-    <div class="steps-nav">
-      <div class="step-dot active" id="sd1">
-        <div class="dot">1</div>
-        <span class="dot-label">Your info</span>
-      </div>
-      <div class="step-line"></div>
-      <div class="step-dot" id="sd2">
-        <div class="dot">2</div>
-        <span class="dot-label">Photos</span>
-      </div>
-      <div class="step-line"></div>
-      <div class="step-dot" id="sd3">
-        <div class="dot">3</div>
-        <span class="dot-label">Review</span>
-      </div>
-      <div class="step-line"></div>
-      <div class="step-dot" id="sd4">
-        <div class="dot">4</div>
-        <span class="dot-label">Done!</span>
-      </div>
-    </div>
+  <div class="steps-nav">
+    <div class="step-dot active" id="sd1"><div class="dot">1</div><span class="dot-label">Your info</span></div>
+    <div class="step-line"></div>
+    <div class="step-dot" id="sd2"><div class="dot">2</div><span class="dot-label">Upload photos</span></div>
+    <div class="step-line"></div>
+    <div class="step-dot" id="sd3"><div class="dot">3</div><span class="dot-label">Add names</span></div>
+    <div class="step-line"></div>
+    <div class="step-dot" id="sd4"><div class="dot">4</div><span class="dot-label">Review</span></div>
+    <div class="step-line"></div>
+    <div class="step-dot" id="sd5"><div class="dot">5</div><span class="dot-label">Done!</span></div>
   </div>
 
-  <!-- STEP 1 -->
+  <!-- STEP 1 — Info -->
   <div id="step1">
     <div class="card">
-      <h2>Your order details</h2>
-      <p>Tell us who this game is for — we'll use this to personalise the packaging and notify you when it's ready.</p>
+      <h2>Order details</h2>
+      <p>Tell us who this game is for.</p>
       <div class="field-row">
         <div class="field"><label>Your name</label><input type="text" id="c-name" placeholder="e.g. Maria Silva"></div>
         <div class="field"><label>Your WhatsApp</label><input type="text" id="c-phone" placeholder="+1 555 000-0000"></div>
@@ -254,45 +206,70 @@ footer a { color: var(--accent); text-decoration: none; }
     </div>
   </div>
 
-  <!-- STEP 2 -->
+  <!-- STEP 2 — Upload all photos -->
   <div id="step2" style="display:none">
     <div class="card">
-      <h2>Add your 24 people</h2>
-      <p>Tap each slot to upload a photo and add the person's name. All 24 must be filled before continuing.</p>
-      <div class="prog-info">
-        <span id="prog-text">0 of 24 added</span>
-        <span id="prog-pct">0%</span>
+      <h2>Upload all 24 photos</h2>
+      <p>Select up to 24 photos at once — you'll name each person in the next step.</p>
+      <div class="upload-zone-big" id="upload-zone" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFiles(event)">
+        <div class="uz-icon">📁</div>
+        <h3>Click or drag photos here</h3>
+        <p>Select up to 24 photos at once · JPG, PNG, HEIC</p>
+        <input type="file" id="bulk-input" accept="image/*" multiple onchange="handleBulkUpload(event)">
       </div>
-      <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
-      <div class="photo-grid" id="photo-grid"></div>
+      <div id="upload-progress" style="display:none">
+        <div class="prog-info">
+          <span id="up-text">0 of 24 photos uploaded</span>
+          <span id="up-pct">0%</span>
+        </div>
+        <div class="prog-bar"><div class="prog-fill" id="up-fill" style="width:0%"></div></div>
+        <div class="photo-grid" id="upload-grid"></div>
+      </div>
     </div>
     <div class="btn-row">
       <button class="btn btn-outline" onclick="goStep(1)">← Back</button>
-      <button class="btn btn-accent" id="btn-review" style="flex:1" onclick="goStep(3)" disabled>Review →</button>
+      <button class="btn btn-accent" id="btn-to-names" style="flex:1;opacity:0.4;pointer-events:none" onclick="goStep(3)">Name each person →</button>
     </div>
   </div>
 
-  <!-- STEP 3 -->
+  <!-- STEP 3 — Name each person -->
   <div id="step3" style="display:none">
+    <div class="card">
+      <h2>Name each person</h2>
+      <p>Tap each photo to add the person's name. All 24 must be named before continuing.</p>
+      <div class="hint">💡 Tap a photo to add the name. Drag photos to reorder them.</div>
+      <div class="prog-info">
+        <span id="name-prog-text">0 of 24 named</span>
+        <span id="name-prog-pct">0%</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="name-prog-fill" style="width:0%"></div></div>
+      <div class="photo-grid" id="name-grid"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goStep(2)">← Back</button>
+      <button class="btn btn-accent" id="btn-to-review" style="flex:1;opacity:0.4;pointer-events:none" onclick="goStep(4)">Review →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4 — Review -->
+  <div id="step4" style="display:none">
     <div class="card">
       <h2>Final review</h2>
       <p>Check all 24 people before submitting. You can go back to edit any slot.</p>
       <div class="review-grid" id="review-grid"></div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-outline" onclick="goStep(2)">← Edit</button>
-      <button class="btn btn-green" style="flex:1" id="btn-submit" onclick="submitOrder()">
-        ✓ Confirm & send to print
-      </button>
+      <button class="btn btn-outline" onclick="goStep(3)">← Edit</button>
+      <button class="btn btn-green" style="flex:1" id="btn-submit" onclick="submitOrder()">✓ Confirm & send to print</button>
     </div>
   </div>
 
-  <!-- STEP 4 -->
-  <div id="step4" style="display:none">
+  <!-- STEP 5 — Done -->
+  <div id="step5" style="display:none">
     <div class="done-wrap">
       <div class="big-icon">🎉</div>
       <h2>Order submitted!</h2>
-      <p>We received everything! GuessWho Maker will be in touch via WhatsApp once your game is printed and ready.</p>
+      <p>We received everything! GuessWho.maker will be in touch via WhatsApp once your game is printed and ready.</p>
       <div class="order-number">
         <div class="label">Order number</div>
         <div class="num" id="order-num">#—</div>
@@ -302,27 +279,20 @@ footer a { color: var(--accent); text-decoration: none; }
   </div>
 </div>
 
-<!-- FOOTER -->
-<footer>
-  Made with ❤️ by <a href="#">GuessWho.maker</a>
-</footer>
+<footer>Made with ❤️ by <a href="#">GuessWho.maker</a></footer>
 
-<!-- PHOTO MODAL -->
-<div class="modal-bg" id="photo-modal">
+<!-- NAME MODAL -->
+<div class="modal-bg" id="name-modal">
   <div class="modal">
-    <h3 id="pm-title">Person 1</h3>
-    <div class="field" style="margin-bottom:12px">
+    <div id="modal-thumb-wrap"></div>
+    <h3 id="nm-title">Person 1</h3>
+    <div class="field">
       <label>Full name</label>
-      <input type="text" id="pm-name" placeholder="e.g. Grandma Mary" maxlength="24">
+      <input type="text" id="nm-name" placeholder="e.g. Grandma Mary" maxlength="24">
     </div>
-    <div class="upload-zone" id="pm-zone" onclick="document.getElementById('pm-file').click()">
-      <span style="font-size:32px">📷</span>
-      <span>Tap to choose a photo</span>
-    </div>
-    <input type="file" id="pm-file" accept="image/*" style="display:none" onchange="handlePhoto(event)">
     <div class="modal-actions">
-      <button class="btn btn-outline" style="flex:1" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-accent" style="flex:1" onclick="saveSlot()">Save</button>
+      <button class="btn btn-outline" style="flex:1" onclick="closeNameModal()">Cancel</button>
+      <button class="btn btn-accent" style="flex:1" onclick="saveName()">Save</button>
     </div>
   </div>
 </div>
@@ -331,135 +301,197 @@ footer a { color: var(--accent); text-decoration: none; }
 <div class="toast" id="toast"></div>
 
 <script>
-const people = Array.from({length:24},(_,i)=>({id:i,name:'',photo:'',file:null}));
-let editSlot=null, tempPhoto='', tempFile=null;
-
-// Get order ID from URL ?order=XXXX
+// State
+const people = Array.from({length:24}, (_, i) => ({ id:i, name:'', photo:'', file:null }));
+let editingSlot = null;
 const params = new URLSearchParams(window.location.search);
 const orderId = params.get('order') || 'DIRECT';
 
+// Navigation
 function startFlow() {
   document.getElementById('hero').style.display = 'none';
   document.getElementById('form-section').classList.add('active');
   window.scrollTo(0,0);
 }
-
 function goHero() {
   document.getElementById('hero').style.display = '';
   document.getElementById('form-section').classList.remove('active');
   window.scrollTo(0,0);
 }
-
 function goStep(n) {
-  [1,2,3,4].forEach(i => {
-    document.getElementById('step'+i).style.display = i===n ? 'block' : 'none';
+  for(let i=1;i<=5;i++) {
+    const s = document.getElementById('step'+i);
+    if(s) s.style.display = i===n ? 'block' : 'none';
     const sd = document.getElementById('sd'+i);
-    sd.classList.remove('active','done');
-    if(i===n) sd.classList.add('active');
-    else if(i<n) sd.classList.add('done');
-  });
-  if(n===2) renderGrid();
-  if(n===3) renderReview();
+    if(sd) { sd.classList.remove('active','done'); if(i===n) sd.classList.add('active'); else if(i<n) sd.classList.add('done'); }
+  }
+  if(n===3) renderNameGrid();
+  if(n===4) renderReview();
   window.scrollTo(0,0);
 }
 
-function renderGrid() {
-  const filled = people.filter(p=>p.name).length;
+// Drag over upload zone
+function dragOver(e) { e.preventDefault(); document.getElementById('upload-zone').classList.add('drag'); }
+function dragLeave() { document.getElementById('upload-zone').classList.remove('drag'); }
+function dropFiles(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('drag');
+  const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+  processFiles(files);
+}
+
+// Bulk upload handler
+function handleBulkUpload(e) {
+  const files = Array.from(e.target.files);
+  processFiles(files);
+}
+
+function processFiles(files) {
+  const toLoad = files.slice(0, 24);
+  if(toLoad.length === 0) return;
+
+  document.getElementById('upload-progress').style.display = 'block';
+  let loaded = 0;
+
+  // Fill from first empty slot
+  let slotIdx = 0;
+  toLoad.forEach(file => {
+    // find next empty slot
+    while(slotIdx < 24 && people[slotIdx].photo) slotIdx++;
+    if(slotIdx >= 24) return;
+    const idx = slotIdx++;
+
+    const reader = new FileReader();
+    reader.onload = ev => {
+      people[idx].photo = ev.target.result;
+      people[idx].file = file;
+      loaded++;
+      updateUploadProgress();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function updateUploadProgress() {
+  const filled = people.filter(p => p.photo).length;
   const pct = Math.round(filled/24*100);
-  document.getElementById('prog-fill').style.width = pct+'%';
-  document.getElementById('prog-text').textContent = filled+' of 24 added';
-  document.getElementById('prog-pct').textContent = pct+'%';
-  document.getElementById('btn-review').disabled = filled < 24;
+  document.getElementById('up-fill').style.width = pct+'%';
+  document.getElementById('up-text').textContent = filled+' of 24 photos uploaded';
+  document.getElementById('up-pct').textContent = pct+'%';
 
-  document.getElementById('photo-grid').innerHTML = people.map(p => `
-    <div class="slot ${p.name?'filled':''}" onclick="openModal(${p.id})">
-      ${p.photo?`<img src="${p.photo}"><div class="overlay"></div><div class="check">✓</div><div class="sname">${p.name}</div>`:`<div class="snum">#${p.id+1}</div><div class="plus">+</div>`}
+  const btn = document.getElementById('btn-to-names');
+  if(filled > 0) { btn.style.opacity='1'; btn.style.pointerEvents='auto'; }
+
+  // Render thumbnails
+  document.getElementById('upload-grid').innerHTML = people.map((p,i) => `
+    <div class="slot ${p.photo ? 'has-photo' : ''}">
+      ${p.photo ? `<img src="${p.photo}">` : `<div class="empty-icon">+</div>`}
+      <span class="snum" style="${p.photo?'display:none':''}">${i+1}</span>
     </div>
   `).join('');
 }
 
-function renderReview() {
-  document.getElementById('review-grid').innerHTML = people.map(p => `
-    <div class="rev-card">
-      <div class="ri">${p.photo?`<img src="${p.photo}">`:'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:.3">👤</div>'}</div>
-      <div class="rn">${p.name||'—'}</div>
+// Name grid (step 3)
+function renderNameGrid() {
+  const named = people.filter(p => p.name).length;
+  const pct = Math.round(named/24*100);
+  document.getElementById('name-prog-fill').style.width = pct+'%';
+  document.getElementById('name-prog-text').textContent = named+' of 24 named';
+  document.getElementById('name-prog-pct').textContent = pct+'%';
+
+  const btn = document.getElementById('btn-to-review');
+  const allNamed = people.every(p => p.name);
+  btn.style.opacity = allNamed ? '1' : '0.4';
+  btn.style.pointerEvents = allNamed ? 'auto' : 'none';
+
+  document.getElementById('name-grid').innerHTML = people.map((p,i) => `
+    <div class="slot ${p.name ? 'has-name' : p.photo ? 'has-photo' : ''}"
+         onclick="openNameModal(${i})"
+         draggable="true"
+         ondragstart="dragStart(event,${i})"
+         ondragover="slotDragOver(event,${i})"
+         ondrop="slotDrop(event,${i})"
+         ondragleave="slotDragLeave(event,${i})"
+         id="name-slot-${i}">
+      ${p.photo ? `<img src="${p.photo}"><div class="overlay"></div>` : `<div class="empty-icon">📷</div>`}
+      ${p.name ? `<div class="check">✓</div>` : ''}
+      <div class="sname">${p.name || `#${i+1}`}</div>
     </div>
   `).join('');
 }
 
-function openModal(id) {
-  editSlot=id; tempPhoto=people[id].photo; tempFile=people[id].file;
-  document.getElementById('pm-title').textContent = 'Person '+(id+1);
-  document.getElementById('pm-name').value = people[id].name;
-  const z = document.getElementById('pm-zone');
-  z.innerHTML = tempPhoto
-    ? `<img src="${tempPhoto}">`
-    : `<span style="font-size:32px">📷</span><span>Tap to choose a photo</span>`;
-  document.getElementById('photo-modal').classList.add('open');
-  setTimeout(()=>document.getElementById('pm-name').focus(),100);
+// Drag to reorder
+let dragSrcIdx = null;
+function dragStart(e, idx) { dragSrcIdx = idx; document.getElementById('name-slot-'+idx).classList.add('dragging'); }
+function slotDragOver(e, idx) { e.preventDefault(); if(dragSrcIdx !== idx) document.getElementById('name-slot-'+idx).classList.add('drag-over'); }
+function slotDragLeave(e, idx) { document.getElementById('name-slot-'+idx).classList.remove('drag-over'); }
+function slotDrop(e, idx) {
+  e.preventDefault();
+  document.getElementById('name-slot-'+idx).classList.remove('drag-over');
+  if(dragSrcIdx === null || dragSrcIdx === idx) return;
+  // Swap
+  const tmp = { ...people[dragSrcIdx] };
+  people[dragSrcIdx] = { ...people[idx], id: dragSrcIdx };
+  people[idx] = { ...tmp, id: idx };
+  dragSrcIdx = null;
+  renderNameGrid();
 }
 
-function closeModal() {
-  document.getElementById('photo-modal').classList.remove('open');
-  tempPhoto=''; tempFile=null;
-  document.getElementById('pm-file').value='';
+// Name modal
+function openNameModal(idx) {
+  editingSlot = idx;
+  const p = people[idx];
+  document.getElementById('nm-title').textContent = 'Person ' + (idx+1);
+  document.getElementById('nm-name').value = p.name;
+  const tw = document.getElementById('modal-thumb-wrap');
+  tw.innerHTML = p.photo
+    ? `<img src="${p.photo}" class="modal-thumb">`
+    : `<div class="modal-thumb-empty">👤</div>`;
+  document.getElementById('name-modal').classList.add('open');
+  setTimeout(() => document.getElementById('nm-name').focus(), 100);
 }
-
-function handlePhoto(e) {
-  const file = e.target.files[0]; if(!file) return;
-  tempFile = file;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    tempPhoto = ev.target.result;
-    document.getElementById('pm-zone').innerHTML = `<img src="${tempPhoto}">`;
-  };
-  reader.readAsDataURL(file);
-}
-
-function saveSlot() {
-  const name = document.getElementById('pm-name').value.trim();
-  if(!name){ document.getElementById('pm-name').focus(); return; }
-  people[editSlot].name = name;
-  people[editSlot].photo = tempPhoto;
-  people[editSlot].file = tempFile;
-  closeModal();
-  renderGrid();
+function closeNameModal() { document.getElementById('name-modal').classList.remove('open'); }
+function saveName() {
+  const name = document.getElementById('nm-name').value.trim();
+  if(!name) { document.getElementById('nm-name').focus(); return; }
+  people[editingSlot].name = name;
+  closeNameModal();
+  renderNameGrid();
   showToast('✅ '+name+' saved!', 'success');
 }
 
+// Review
+function renderReview() {
+  document.getElementById('review-grid').innerHTML = people.map(p => `
+    <div class="rev-card">
+      <div class="ri">${p.photo ? `<img src="${p.photo}">` : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:.3">👤</div>'}</div>
+      <div class="rn">${p.name || '—'}</div>
+    </div>
+  `).join('');
+}
+
+// Submit
 async function submitOrder() {
   const btn = document.getElementById('btn-submit');
-  btn.disabled = true;
-  btn.textContent = 'Uploading photos...';
-
+  btn.disabled = true; btn.textContent = 'Uploading...';
   try {
     const formData = new FormData();
     formData.append('orderId', orderId);
     formData.append('clientName', document.getElementById('c-name').value);
     formData.append('clientPhone', document.getElementById('c-phone').value);
     formData.append('gameTitle', document.getElementById('c-title').value);
+    formData.append('people', JSON.stringify(people.map(p => ({ id:p.id, name:p.name }))));
+    people.forEach(p => { if(p.file) formData.append(`photo_${p.id}`, p.file, `slot${p.id}.jpg`); });
 
-    const peopleData = people.map(p => ({id:p.id, name:p.name}));
-    formData.append('people', JSON.stringify(peopleData));
-
-    people.forEach(p => {
-      if(p.file) formData.append(`photo_${p.id}`, p.file, `slot${p.id}.jpg`);
-    });
-
-    const res = await fetch('/api/submit-order', { method: 'POST', body: formData });
+    const res = await fetch('/api/submit-order', { method:'POST', body:formData });
     const data = await res.json();
-
     if(data.success) {
       document.getElementById('order-num').textContent = '#'+data.orderNumber;
-      goStep(4);
-    } else {
-      throw new Error(data.error || 'Unknown error');
-    }
+      goStep(5);
+    } else throw new Error(data.error || 'Unknown error');
   } catch(err) {
-    console.error(err);
     showToast('❌ Error submitting. Please try again.', 'error');
-    btn.disabled = false;
-    btn.textContent = '✓ Confirm & send to print';
+    btn.disabled = false; btn.textContent = '✓ Confirm & send to print';
   }
 }
 
@@ -467,11 +499,11 @@ function showToast(msg, type='') {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.className = 'toast show'+(type?' '+type:'');
-  setTimeout(()=>t.classList.remove('show'), 3000);
+  setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-document.getElementById('photo-modal').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
-document.getElementById('pm-name').addEventListener('keydown', e=>{ if(e.key==='Enter') saveSlot(); });
+document.getElementById('name-modal').addEventListener('click', function(e) { if(e.target===this) closeNameModal(); });
+document.getElementById('nm-name').addEventListener('keydown', e => { if(e.key==='Enter') saveName(); });
 </script>
 </body>
 </html>
