@@ -33,13 +33,13 @@ export default async function handler(req, res) {
       const slotId = key.replace('photo_', '');
       const fileName = `orders/${orderNumber}/slot_${slotId}.jpg`;
       const { error } = await supabase.storage
-        .from('photos')
+        .from('Photos')
         .upload(fileName, file.buffer, {
           contentType: 'image/jpeg',
           upsert: true,
         });
       if (!error) {
-        const { data } = supabase.storage.from('photos').getPublicUrl(fileName);
+        const { data } = supabase.storage.from('Photos').getPublicUrl(fileName);
         photoUrls[slotId] = data.publicUrl;
       }
     }
