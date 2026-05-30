@@ -208,9 +208,9 @@ footer a { color: var(--accent); text-decoration: none; }
     <div class="card">
       <h2>Order details</h2>
       <p>Tell us who this game is for.</p>
-      <div class="field-row">
-        <div class="field"><label>Your name</label><input type="text" id="c-name" placeholder="e.g. Maria Silva"></div>
-        <div class="field"><label>Your WhatsApp</label><input type="text" id="c-phone" placeholder="+1 555 000-0000"></div>
+      <div class="field full">
+        <label>Your name</label>
+        <input type="text" id="c-name" placeholder="e.g. Maria Silva">
       </div>
       <div class="field full" style="margin-bottom:0">
         <label>Game title</label>
@@ -502,7 +502,7 @@ async function submitOrder() {
     const formData = new FormData();
     formData.append('orderId', orderId);
     formData.append('clientName', document.getElementById('c-name').value);
-    formData.append('clientPhone', document.getElementById('c-phone').value);
+    formData.append('clientPhone', '');
     formData.append('gameTitle', document.getElementById('c-title').value);
     formData.append('people', JSON.stringify(people.map(p => ({ id:p.id, name:p.name }))));
     people.forEach(p => { if(p.file) formData.append(`photo_${p.id}`, p.file, `slot${p.id}.jpg`); });
