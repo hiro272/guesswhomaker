@@ -57,7 +57,7 @@ export default async function handler(req, res) {
     for (let i = 0; i < photoGrid.length; i += 6) rows.push(`<tr>${photoGrid.slice(i,i+6).join('')}</tr>`);
 
     await resend.emails.send({
-      from: 'Guess Who Maker <onboarding@resend.dev>',
+      from: 'Guess Who Maker <dizing@dizcharge.com>',
       to: process.env.RESEND_TO_EMAIL || 'hiro@dizcharge.com',
       subject: `🎲 New order #${orderNumber} — ${clientName} (${people.length}/24 photos)`,
       html: `<!DOCTYPE html><html><body style="background:#0c0c0b;color:#eeeae0;font-family:sans-serif;margin:0;padding:0">
