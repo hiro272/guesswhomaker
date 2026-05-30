@@ -121,6 +121,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 }
 .slot-overlay-del:hover .del-btn { opacity: 1; }
 
+
 /* REVIEW GRID */
 .review-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 1.5rem; }
 @media (max-width: 600px) { .review-grid { grid-template-columns: repeat(4, 1fr); } }
@@ -427,6 +428,7 @@ function renderNameGrid() {
 
   document.getElementById('name-grid').innerHTML = people.map((p,i) => `
     <div class="slot ${p.name ? 'has-name' : p.photo ? 'has-photo' : ''}"
+         onclick="openNameModal(${i})"
          draggable="true"
          ondragstart="dragStart(event,${i})"
          ondragover="slotDragOver(event,${i})"
@@ -434,15 +436,10 @@ function renderNameGrid() {
          ondragleave="slotDragLeave(event,${i})"
          id="name-slot-${i}">
       ${p.photo
-        ? `<img src="${p.photo}">
-           <div class="overlay"></div>
-           <div class="slot-overlay-del" onclick="event.stopPropagation();deletePhotoFromNames(${i})">
-             <span class="del-btn">✕</span>
-           </div>`
-        : `<div class="empty-icon" onclick="document.getElementById('replace-input-${i}').click()">📷</div>
-           <input type="file" id="replace-input-${i}" accept="image/*" style="display:none" onchange="replacePhoto(event,${i})">`}
+        ? `<img src="${p.photo}"><div class="overlay"></div>`
+        : `<div class="empty-icon">📷</div>`}
       ${p.name ? `<div class="check">✓</div>` : ''}
-      <div class="sname" onclick="openNameModal(${i})">${p.name || `#${i+1}`}</div>
+      <div class="sname">${p.name || `#${i+1}`}</div>
     </div>
   `).join('');
 }
