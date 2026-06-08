@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Guess Who Maker</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
   --bg: #0c0c0b; --surface: #161614; --surface2: #1f1f1c;
@@ -16,7 +17,6 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-/* HERO */
 .hero {
   min-height: 100vh; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
@@ -24,27 +24,21 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(212,240,58,0.06) 0%, transparent 70%), var(--bg);
   position: relative; overflow: hidden;
 }
-.hero::before {
-  content: ''; position: absolute; inset: 0;
-  background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
-  background-size: 32px 32px; pointer-events: none;
-}
+.hero::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 32px 32px; pointer-events: none; }
 .brand { font-size: 12px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; margin-bottom: 2rem; }
 .brand span { color: var(--accent); }
 .hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(44px,8vw,80px); font-weight: 800; line-height: 0.95; letter-spacing: -3px; margin-bottom: 1.5rem; }
 .hero h1 em { color: var(--accent); font-style: normal; }
 .hero p { font-size: 17px; color: var(--muted); max-width: 420px; line-height: 1.6; margin-bottom: 2.5rem; }
-.hero-btn { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: #0c0c0b; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; padding: 14px 28px; border-radius: 100px; border: none; cursor: pointer; transition: transform 0.2s, background 0.2s; text-decoration: none; }
+.hero-btn { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: #0c0c0b; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; padding: 14px 28px; border-radius: 100px; border: none; cursor: pointer; transition: transform 0.2s, background 0.2s; }
 .hero-btn:hover { background: var(--accent2); transform: translateY(-2px); }
 .hero-steps { display: flex; gap: 32px; margin-top: 3rem; flex-wrap: wrap; justify-content: center; }
 .hero-step .num { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--accent); line-height: 1; }
 .hero-step .label { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
-/* FORM */
 .form-section { max-width: 860px; margin: 0 auto; padding: 2rem; display: none; }
 .form-section.active { display: block; }
 
-/* STEPS NAV */
 .steps-nav { display: flex; align-items: center; gap: 0; margin-bottom: 2rem; }
 .step-dot { display: flex; align-items: center; gap: 0; }
 .step-dot .dot { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--border2); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--muted); transition: all 0.3s; }
@@ -54,7 +48,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .step-dot.active .dot-label { color: var(--text); }
 .step-line { flex: 1; height: 1px; background: var(--border); margin: 0 12px; min-width: 20px; }
 
-/* CARDS */
 .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1.5rem; }
 .card h2 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 6px; }
 .card p { font-size: 14px; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6; }
@@ -65,37 +58,25 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .field input:focus { border-color: var(--accent); }
 .field.full { grid-column: 1/-1; }
 
-/* UPLOAD ZONE */
-.upload-zone-big {
-  border: 2px dashed var(--border2); border-radius: 16px;
-  padding: 3rem 2rem; text-align: center; cursor: pointer;
-  transition: all 0.2s; position: relative; margin-bottom: 1.5rem;
-}
+.upload-zone-big { border: 2px dashed var(--border2); border-radius: 16px; padding: 3rem 2rem; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; margin-bottom: 1.5rem; }
 .upload-zone-big:hover, .upload-zone-big.drag { border-color: var(--accent); background: rgba(212,240,58,0.03); }
 .upload-zone-big .uz-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.4; }
 .upload-zone-big h3 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 6px; }
 .upload-zone-big p { font-size: 14px; color: var(--muted); margin: 0; }
 .upload-zone-big input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
 
-/* PROGRESS */
 .prog-info { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
 .prog-bar { height: 3px; background: var(--surface2); border-radius: 2px; margin-bottom: 1.5rem; overflow: hidden; }
 .prog-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s cubic-bezier(.4,0,.2,1); }
 
-/* PHOTO GRID */
 .photo-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
 @media (max-width: 600px) { .photo-grid { grid-template-columns: repeat(4, 1fr); } }
-@media (max-width: 400px) { .photo-grid { grid-template-columns: repeat(3, 1fr); } }
 
-.slot {
-  aspect-ratio: 2/3; border-radius: 10px; border: 1px solid var(--border2);
-  background: var(--surface2); cursor: pointer; position: relative;
-  overflow: hidden; transition: border-color 0.2s, transform 0.15s;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
+.slot { aspect-ratio: 2/3; border-radius: 10px; border: 1px solid var(--border2); background: var(--surface2); cursor: pointer; position: relative; overflow: hidden; transition: border-color 0.2s, transform 0.15s; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .slot:hover { border-color: var(--accent); transform: scale(1.03); }
 .slot.has-photo { border-color: var(--border); }
 .slot.has-name { border-color: var(--green); }
+.slot.uploading { border-color: var(--accent); }
 .slot.dragging { opacity: 0.4; transform: scale(0.95); }
 .slot.drag-over { border-color: var(--accent); transform: scale(1.05); }
 .slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -104,25 +85,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .slot .snum { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; color: var(--muted); }
 .slot .check { position: absolute; top: 5px; right: 5px; width: 16px; height: 16px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; font-size: 9px; z-index: 2; }
 .slot .empty-icon { font-size: 18px; opacity: 0.15; }
-.slot-overlay-del {
-  position: absolute; inset: 0;
-  background: rgba(0,0,0,0);
-  display: flex; align-items: flex-start; justify-content: flex-end;
-  padding: 4px; transition: background 0.15s;
-  cursor: pointer; z-index: 3;
-}
+.slot .upload-spinner { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); font-size: 20px; }
+.slot-overlay-del { position: absolute; inset: 0; background: rgba(0,0,0,0); display: flex; align-items: flex-start; justify-content: flex-end; padding: 4px; transition: background 0.15s; cursor: pointer; z-index: 3; }
 .slot-overlay-del:hover { background: rgba(0,0,0,0.35); }
-.del-btn {
-  width: 18px; height: 18px; border-radius: 50%;
-  background: var(--red); color: white;
-  font-size: 10px; font-weight: 700;
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: opacity 0.15s;
-}
+.del-btn { width: 18px; height: 18px; border-radius: 50%; background: var(--red); color: white; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.15s; }
 .slot-overlay-del:hover .del-btn { opacity: 1; }
 
-
-/* REVIEW GRID */
 .review-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 1.5rem; }
 @media (max-width: 600px) { .review-grid { grid-template-columns: repeat(4, 1fr); } }
 .rev-card { background: var(--surface2); border: 0.5px solid var(--border); border-radius: 8px; aspect-ratio: 2/3; overflow: hidden; display: flex; flex-direction: column; }
@@ -130,7 +98,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .rev-card .ri img { width: 100%; height: 100%; object-fit: cover; }
 .rev-card .rn { font-size: 7px; font-weight: 500; text-align: center; padding: 3px 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* DONE */
 .done-wrap { text-align: center; padding: 3rem 1rem; }
 .done-wrap .big-icon { font-size: 64px; margin-bottom: 1.5rem; animation: pop 0.5s cubic-bezier(.36,.07,.19,.97); }
 @keyframes pop { 0%{transform:scale(0.5);opacity:0} 80%{transform:scale(1.15)} 100%{transform:scale(1);opacity:1} }
@@ -140,7 +107,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .order-number .label { font-size: 12px; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; }
 .order-number .num { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--accent); }
 
-/* BUTTONS */
 .btn { padding: 12px 24px; border-radius: 100px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; border: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
 .btn-accent { background: var(--accent); color: #0c0c0b; }
 .btn-accent:hover { background: var(--accent2); transform: translateY(-1px); }
@@ -152,7 +118,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .btn-full { width: 100%; justify-content: center; }
 .btn-row { display: flex; gap: 10px; }
 
-/* NAME MODAL */
 .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 300; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(4px); }
 .modal-bg.open { display: flex; }
 .modal { background: var(--surface); border: 0.5px solid var(--border2); border-radius: 20px; padding: 1.75rem; width: 100%; max-width: 320px; }
@@ -161,13 +126,11 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .modal h3 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 1rem; text-align: center; }
 .modal-actions { display: flex; gap: 8px; margin-top: 14px; }
 
-/* TOAST */
+.hint { font-size: 12px; color: var(--muted); background: var(--surface2); border-radius: 8px; padding: 8px 12px; margin-bottom: 1rem; }
+
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface); border: 0.5px solid var(--border2); border-radius: 100px; padding: 10px 20px; font-size: 13px; white-space: nowrap; opacity: 0; transition: all 0.3s; z-index: 999; pointer-events: none; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 .toast.success { border-color: var(--green); }
-
-/* HINT */
-.hint { font-size: 12px; color: var(--muted); background: var(--surface2); border-radius: 8px; padding: 8px 12px; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
 
 footer { text-align: center; padding: 2rem; font-size: 12px; color: var(--muted); border-top: 0.5px solid var(--border); }
 footer a { color: var(--accent); text-decoration: none; }
@@ -175,21 +138,19 @@ footer a { color: var(--accent); text-decoration: none; }
 </head>
 <body>
 
-<!-- HERO -->
 <section class="hero" id="hero">
   <p class="brand">by <span>GuessWho.maker</span></p>
   <h1>Your Family<br><em>Guess Who</em><br>Game</h1>
-  <p>Upload all 24 photos at once, name each person, and we'll print your custom family board game.</p>
-  <a href="#" class="hero-btn" onclick="startFlow();return false;">Get started →</a>
+  <p>Upload 24 photos, name each person, and we'll print your custom family board game.</p>
+  <button class="hero-btn" onclick="startFlow()">Get started →</button>
   <div class="hero-steps">
     <div class="hero-step"><div class="num">01</div><div class="label">Fill your details</div></div>
-    <div class="hero-step"><div class="num">02</div><div class="label">Upload all 24 photos</div></div>
+    <div class="hero-step"><div class="num">02</div><div class="label">Upload 24 photos</div></div>
     <div class="hero-step"><div class="num">03</div><div class="label">Name each person</div></div>
     <div class="hero-step"><div class="num">04</div><div class="label">Confirm & we print!</div></div>
   </div>
 </section>
 
-<!-- FORM -->
 <div class="form-section" id="form-section">
   <div class="steps-nav">
     <div class="step-dot active" id="sd1"><div class="dot">1</div><span class="dot-label">Your info</span></div>
@@ -203,12 +164,12 @@ footer a { color: var(--accent); text-decoration: none; }
     <div class="step-dot" id="sd5"><div class="dot">5</div><span class="dot-label">Done!</span></div>
   </div>
 
-  <!-- STEP 1 — Info -->
+  <!-- STEP 1 -->
   <div id="step1">
     <div class="card">
       <h2>Order details</h2>
       <p>Tell us who this game is for.</p>
-      <div class="field full">
+      <div class="field full" style="margin-bottom:12px">
         <label>Your name</label>
         <input type="text" id="c-name" placeholder="e.g. Maria Silva">
       </div>
@@ -223,11 +184,11 @@ footer a { color: var(--accent); text-decoration: none; }
     </div>
   </div>
 
-  <!-- STEP 2 — Upload all photos -->
+  <!-- STEP 2 -->
   <div id="step2" style="display:none">
     <div class="card">
       <h2>Upload all 24 photos</h2>
-      <p>Select up to 24 photos at once — you'll name each person in the next step.</p>
+      <p>Select up to 24 photos at once — they upload directly to our server. You'll name each person next.</p>
       <div class="upload-zone-big" id="upload-zone" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFiles(event)">
         <div class="uz-icon">📁</div>
         <h3>Click or drag photos here</h3>
@@ -249,7 +210,7 @@ footer a { color: var(--accent); text-decoration: none; }
     </div>
   </div>
 
-  <!-- STEP 3 — Name each person -->
+  <!-- STEP 3 -->
   <div id="step3" style="display:none">
     <div class="card">
       <h2>Name each person</h2>
@@ -268,7 +229,7 @@ footer a { color: var(--accent); text-decoration: none; }
     </div>
   </div>
 
-  <!-- STEP 4 — Review -->
+  <!-- STEP 4 -->
   <div id="step4" style="display:none">
     <div class="card">
       <h2>Final review</h2>
@@ -281,12 +242,12 @@ footer a { color: var(--accent); text-decoration: none; }
     </div>
   </div>
 
-  <!-- STEP 5 — Done -->
+  <!-- STEP 5 -->
   <div id="step5" style="display:none">
     <div class="done-wrap">
       <div class="big-icon">🎉</div>
       <h2>Order submitted!</h2>
-      <p>We received everything! GuessWho.maker will be in touch via WhatsApp once your game is printed and ready.</p>
+      <p>We received everything! GuessWho.maker will be in touch once your game is printed and ready.</p>
       <div class="order-number">
         <div class="label">Order number</div>
         <div class="num" id="order-num">#—</div>
@@ -314,17 +275,22 @@ footer a { color: var(--accent); text-decoration: none; }
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-// State
-const people = Array.from({length:24}, (_, i) => ({ id:i, name:'', photo:'', file:null }));
-let editingSlot = null;
-const params = new URLSearchParams(window.location.search);
-const orderId = params.get('order') || 'DIRECT';
+// Supabase client for direct uploads
+const SUPABASE_URL = 'https://mjhlonbfhjsdygrztdmm.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_Kq5P0g5YZqY3wuk7hI_jfw_lmcroRoF';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Navigation
+const params = new URLSearchParams(window.location.search);
+const orderId = params.get('order') || ('ORD-' + Math.random().toString(36).slice(2,8).toUpperCase());
+
+// State — photos stored as { id, name, photoUrl (Supabase public URL), preview (local blob) }
+const people = Array.from({length:24}, (_, i) => ({ id:i, name:'', photoUrl:'', preview:'' }));
+let editingSlot = null;
+let uploadCount = 0;
+
 function startFlow() {
   document.getElementById('hero').style.display = 'none';
   document.getElementById('form-section').classList.add('active');
@@ -333,7 +299,6 @@ function startFlow() {
 function goHero() {
   document.getElementById('hero').style.display = '';
   document.getElementById('form-section').classList.remove('active');
-  window.scrollTo(0,0);
 }
 function goStep(n) {
   for(let i=1;i<=5;i++) {
@@ -347,87 +312,101 @@ function goStep(n) {
   window.scrollTo(0,0);
 }
 
-// Drag over upload zone
+// DRAG OVER UPLOAD ZONE
 function dragOver(e) { e.preventDefault(); document.getElementById('upload-zone').classList.add('drag'); }
 function dragLeave() { document.getElementById('upload-zone').classList.remove('drag'); }
 function dropFiles(e) {
   e.preventDefault();
   document.getElementById('upload-zone').classList.remove('drag');
-  const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
-  processFiles(files);
+  processFiles(Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/')));
 }
-
-// Bulk upload handler
-function handleBulkUpload(e) {
-  const files = Array.from(e.target.files);
-  processFiles(files);
-}
+function handleBulkUpload(e) { processFiles(Array.from(e.target.files)); }
 
 function processFiles(files) {
   const toLoad = files.slice(0, 24);
-  if(toLoad.length === 0) return;
-
+  if(!toLoad.length) return;
   document.getElementById('upload-progress').style.display = 'block';
-  let loaded = 0;
 
-  // Fill from first empty slot
   let slotIdx = 0;
   toLoad.forEach(file => {
-    // find next empty slot
-    while(slotIdx < 24 && people[slotIdx].photo) slotIdx++;
+    while(slotIdx < 24 && people[slotIdx].photoUrl) slotIdx++;
     if(slotIdx >= 24) return;
     const idx = slotIdx++;
-
-    const reader = new FileReader();
-    reader.onload = ev => {
-      people[idx].photo = ev.target.result;
-      people[idx].file = file;
-      loaded++;
-      updateUploadProgress();
-    };
-    reader.readAsDataURL(file);
+    uploadPhoto(file, idx);
   });
 }
 
-function updateUploadProgress() {
-  const filled = people.filter(p => p.photo).length;
+async function uploadPhoto(file, idx) {
+  // Show local preview immediately
+  const reader = new FileReader();
+  reader.onload = ev => { people[idx].preview = ev.target.result; renderUploadGrid(); };
+  reader.readAsDataURL(file);
+
+  // Mark as uploading
+  people[idx].uploading = true;
+  renderUploadGrid();
+
+  try {
+    // Upload directly to Supabase from browser
+    const ext = file.name.split('.').pop() || 'jpg';
+    const path = `orders/${orderId}/slot_${idx}.${ext}`;
+    const { error } = await sb.storage.from('Photos').upload(path, file, { contentType: file.type, upsert: true });
+    if (error) throw error;
+    const { data } = sb.storage.from('Photos').getPublicUrl(path);
+    people[idx].photoUrl = data.publicUrl;
+    people[idx].uploading = false;
+    renderUploadGrid();
+    showToast('✅ Photo uploaded!', 'success');
+  } catch(err) {
+    console.error('Upload error:', err);
+    people[idx].uploading = false;
+    people[idx].preview = '';
+    renderUploadGrid();
+    showToast('❌ Upload failed, please try again', '');
+  }
+}
+
+function renderUploadGrid() {
+  const filled = people.filter(p => p.photoUrl).length;
   const pct = Math.round(filled/24*100);
   document.getElementById('up-fill').style.width = pct+'%';
   document.getElementById('up-text').textContent = filled+' of 24 photos uploaded';
   document.getElementById('up-pct').textContent = pct+'%';
-
   const btn = document.getElementById('btn-to-names');
   if(filled > 0) { btn.style.opacity='1'; btn.style.pointerEvents='auto'; }
 
-  // Render thumbnails
   document.getElementById('upload-grid').innerHTML = people.map((p,i) => `
-    <div class="slot ${p.photo ? 'has-photo' : ''}" onclick="${p.photo ? '' : `document.getElementById('bulk-input').click()`}">
-      ${p.photo
-        ? `<img src="${p.photo}">
-           <div class="slot-overlay-del" onclick="event.stopPropagation();deletePhoto(${i})">
-             <span class="del-btn">✕</span>
-           </div>`
-        : `<div class="empty-icon">+</div>`}
-      <span class="snum" style="${p.photo?'display:none':''}">${i+1}</span>
+    <div class="slot ${p.photoUrl ? 'has-photo' : p.uploading ? 'uploading' : ''}">
+      ${p.preview ? `<img src="${p.preview}">` : ''}
+      ${p.uploading ? `<div class="upload-spinner">⏳</div>` : ''}
+      ${p.photoUrl ? `<div class="slot-overlay-del" onclick="event.stopPropagation();deletePhoto(${i})"><span class="del-btn">✕</span></div>` : ''}
+      ${!p.preview && !p.uploading ? `<div class="empty-icon">+</div>` : ''}
+      <span class="snum" style="${p.preview?'display:none':''}">${i+1}</span>
     </div>
   `).join('');
 }
 
-// Name grid (step 3)
+async function deletePhoto(idx) {
+  people[idx].photoUrl = '';
+  people[idx].preview = '';
+  renderUploadGrid();
+  showToast('Photo removed', '');
+}
+
+// NAME GRID
 function renderNameGrid() {
   const named = people.filter(p => p.name).length;
   const pct = Math.round(named/24*100);
   document.getElementById('name-prog-fill').style.width = pct+'%';
   document.getElementById('name-prog-text').textContent = named+' of 24 named';
   document.getElementById('name-prog-pct').textContent = pct+'%';
-
   const btn = document.getElementById('btn-to-review');
   const allNamed = people.every(p => p.name);
   btn.style.opacity = allNamed ? '1' : '0.4';
   btn.style.pointerEvents = allNamed ? 'auto' : 'none';
 
   document.getElementById('name-grid').innerHTML = people.map((p,i) => `
-    <div class="slot ${p.name ? 'has-name' : p.photo ? 'has-photo' : ''}"
+    <div class="slot ${p.name ? 'has-name' : p.photoUrl ? 'has-photo' : ''}"
          onclick="openNameModal(${i})"
          draggable="true"
          ondragstart="dragStart(event,${i})"
@@ -435,16 +414,14 @@ function renderNameGrid() {
          ondrop="slotDrop(event,${i})"
          ondragleave="slotDragLeave(event,${i})"
          id="name-slot-${i}">
-      ${p.photo
-        ? `<img src="${p.photo}"><div class="overlay"></div>`
-        : `<div class="empty-icon">📷</div>`}
+      ${p.preview || p.photoUrl ? `<img src="${p.preview || p.photoUrl}"><div class="overlay"></div>` : `<div class="empty-icon">📷</div>`}
       ${p.name ? `<div class="check">✓</div>` : ''}
       <div class="sname">${p.name || `#${i+1}`}</div>
     </div>
   `).join('');
 }
 
-// Drag to reorder
+// DRAG TO REORDER
 let dragSrcIdx = null;
 function dragStart(e, idx) { dragSrcIdx = idx; document.getElementById('name-slot-'+idx).classList.add('dragging'); }
 function slotDragOver(e, idx) { e.preventDefault(); if(dragSrcIdx !== idx) document.getElementById('name-slot-'+idx).classList.add('drag-over'); }
@@ -453,7 +430,6 @@ function slotDrop(e, idx) {
   e.preventDefault();
   document.getElementById('name-slot-'+idx).classList.remove('drag-over');
   if(dragSrcIdx === null || dragSrcIdx === idx) return;
-  // Swap
   const tmp = { ...people[dragSrcIdx] };
   people[dragSrcIdx] = { ...people[idx], id: dragSrcIdx };
   people[idx] = { ...tmp, id: idx };
@@ -461,16 +437,15 @@ function slotDrop(e, idx) {
   renderNameGrid();
 }
 
-// Name modal
+// NAME MODAL
 function openNameModal(idx) {
   editingSlot = idx;
   const p = people[idx];
-  document.getElementById('nm-title').textContent = 'Person ' + (idx+1);
+  document.getElementById('nm-title').textContent = 'Person '+(idx+1);
   document.getElementById('nm-name').value = p.name;
   const tw = document.getElementById('modal-thumb-wrap');
-  tw.innerHTML = p.photo
-    ? `<img src="${p.photo}" class="modal-thumb">`
-    : `<div class="modal-thumb-empty">👤</div>`;
+  const src = p.preview || p.photoUrl;
+  tw.innerHTML = src ? `<img src="${src}" class="modal-thumb">` : `<div class="modal-thumb-empty">👤</div>`;
   document.getElementById('name-modal').classList.add('open');
   setTimeout(() => document.getElementById('nm-name').focus(), 100);
 }
@@ -484,67 +459,41 @@ function saveName() {
   showToast('✅ '+name+' saved!', 'success');
 }
 
-// Review
+// REVIEW
 function renderReview() {
   document.getElementById('review-grid').innerHTML = people.map(p => `
     <div class="rev-card">
-      <div class="ri">${p.photo ? `<img src="${p.photo}">` : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:.3">👤</div>'}</div>
+      <div class="ri">${(p.preview || p.photoUrl) ? `<img src="${p.preview || p.photoUrl}">` : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:.3">👤</div>'}</div>
       <div class="rn">${p.name || '—'}</div>
     </div>
   `).join('');
 }
 
-// Submit
+// SUBMIT — sends JSON (no files, just URLs)
 async function submitOrder() {
   const btn = document.getElementById('btn-submit');
-  btn.disabled = true; btn.textContent = 'Uploading...';
+  btn.disabled = true; btn.textContent = 'Submitting...';
   try {
-    const formData = new FormData();
-    formData.append('orderId', orderId);
-    formData.append('clientName', document.getElementById('c-name').value);
-    formData.append('clientPhone', '');
-    formData.append('gameTitle', document.getElementById('c-title').value);
-    formData.append('people', JSON.stringify(people.map(p => ({ id:p.id, name:p.name }))));
-    people.forEach(p => { if(p.file) formData.append(`photo_${p.id}`, p.file, `slot${p.id}.jpg`); });
-
-    const res = await fetch('/api/submit-order', { method:'POST', body:formData });
+    const payload = {
+      clientName: document.getElementById('c-name').value,
+      clientPhone: '',
+      gameTitle: document.getElementById('c-title').value,
+      people: people.map(p => ({ id: p.id, name: p.name, photoUrl: p.photoUrl })),
+    };
+    const res = await fetch('/api/submit-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
     const data = await res.json();
     if(data.success) {
       document.getElementById('order-num').textContent = '#'+data.orderNumber;
       goStep(5);
     } else throw new Error(data.error || 'Unknown error');
   } catch(err) {
-    showToast('❌ Error submitting. Please try again.', 'error');
+    showToast('❌ Error submitting. Please try again.', '');
     btn.disabled = false; btn.textContent = '✓ Confirm & send to print';
   }
-}
-
-function deletePhotoFromNames(idx) {
-  people[idx].photo = '';
-  people[idx].file = null;
-  people[idx].name = '';
-  renderNameGrid();
-  showToast('Photo removed — tap the slot to upload a new one', '');
-}
-
-function replacePhoto(e, idx) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    people[idx].photo = ev.target.result;
-    people[idx].file = file;
-    renderNameGrid();
-    showToast('✅ Photo replaced!', 'success');
-  };
-  reader.readAsDataURL(file);
-}
-
-function deletePhoto(idx) {
-  people[idx].photo = '';
-  people[idx].file = null;
-  updateUploadProgress();
-  showToast('Photo removed — slot #'+(idx+1)+' is now empty', '');
 }
 
 function showToast(msg, type='') {
